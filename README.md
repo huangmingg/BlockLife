@@ -9,7 +9,7 @@ npm install -g ganache-cli
 <br>
 Once done, run the following command to deploy blockchain server (default at 127.0.0.1:8545)
 <br>
-ganache-cli (Do not close)
+ganache-cli // do not close
 ###### Go to the TruffleNetwork folder
 truffle migrate // to compile and deploy the contracts on the server
 
@@ -20,7 +20,7 @@ truffle migrate // to compile and deploy the contracts on the server
 ###### Go to the BackEnd folder and install the required packages (Express server will be deployed at port 3000)
 cd BackEnd && npm install
 <br>
-nodemon www (Do not close)
+nodemon www // do not close
 
 
 ### Setting up of FrontEnd
@@ -28,6 +28,6 @@ nodemon www (Do not close)
 ###### Go to the FrontEnd folder and install the required packages (Deployed at http://localhost:8100/)
 cd FrontEnd && npm install
 <br>
-ionic serve (Do not close)
+ionic serve // do not close
 
 
