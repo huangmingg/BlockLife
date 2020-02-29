@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+const IP_ADDRESS = "http://localhost:3000";
 
 @Component({
   selector: 'app-tab1',
@@ -8,5 +9,28 @@ import { Component } from '@angular/core';
 export class Tab1Page {
 
   constructor() {}
+
+  fetchAddress() {
+    return new Promise(function(resolve, reject) {
+      fetch(IP_ADDRESS + '/truffle/fetchAddress', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'}
+      })
+      .catch((error) => {
+                  console.log(error);
+                  reject(error);
+              })
+      .then((response) => response.json())
+      .then((res) => {
+              console.log(res.message);
+              resolve(JSON.parse(JSON.stringify(res.message)));
+      });
+
+    });
+
+  }
+
 
 }

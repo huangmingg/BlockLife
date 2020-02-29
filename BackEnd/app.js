@@ -4,10 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
+var cors = require('cors')
 
 var indexRouter = require('./routes/index');
+var truffleRouter = require('./routes/truffle');
 
 var app = express();
+
+var corsOptions = {
+  origin: 'http://localhost:8100',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+// app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,7 +27,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+app.options('*', cors(corsOptions))
+
+
 app.use('/', indexRouter);
+app.use('/truffle', truffleRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
