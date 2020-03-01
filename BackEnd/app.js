@@ -5,6 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
 var cors = require('cors')
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+
+
 
 var indexRouter = require('./routes/index');
 var truffleRouter = require('./routes/truffle');
@@ -15,7 +19,6 @@ var corsOptions = {
   origin: 'http://localhost:8100',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-// app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +38,6 @@ app.use('/', indexRouter);
 app.use('/truffle', truffleRouter);
 
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -51,5 +53,32 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+// Contract deployment -- Only used during development
+var EcosystemJSON = require("./build/contracts/Ecosystem.json");
+let abi = EcosystemJSON.abi;
+let EcosystemContract = new web3.eth.Contract(abi);
+EcosystemContract.options.data =  EcosystemJSON.bytecode;
+
+web3.eth.getAccounts()
+.then(function(result){ 
+    global.accounts = result
+    EcosystemContract.deploy()
+    .send({
+        from: accounts[0],
+        gas: 1500000,
+        gasPrice: '3000000'
+    })
+    .then(function(ecosystemInstance){
+        global.ecosystemInstance = ecosystemInstance
+        console.log(`Ecosystem Contract has been deployed at : ${ecosystemInstance.options.address} by ${accounts[0]}`)
+    })
+    .catch(function(error) {
+      console.log(error)
+    })    
+});
+
 
 module.exports = app;

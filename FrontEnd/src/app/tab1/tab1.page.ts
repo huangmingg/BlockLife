@@ -22,14 +22,35 @@ export class Tab1Page {
                   console.log(error);
                   reject(error);
               })
-      .then((response) => response.json())
+      .then((response : Response) => response.json())
       .then((res) => {
-              console.log(res.message);
-              resolve(JSON.parse(JSON.stringify(res.message)));
+          console.log(res.message);
+          resolve(JSON.parse(JSON.stringify(res.message)));
       });
 
     });
 
+  }
+
+  checkContractOwner() {
+    return new Promise(function(resolve, reject) {
+      fetch(IP_ADDRESS + '/truffle/createOrganization', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'}
+      })
+      .catch((error) => {
+                  console.log(error);
+                  reject(error);
+              })
+      .then((response : Response) => response.json())
+      .then((res) => {
+          console.log(res.message);
+          resolve(JSON.parse(JSON.stringify(res.message)));
+      });
+
+    });
   }
 
 
