@@ -13,8 +13,13 @@
     </ion-toolbar>
   </ion-header>
   <app-explore-container name="Tab 1 page"></app-explore-container>
+  <p>{{"Account Address : " + accountAddress}}</p>
   <ion-button expand="full" (click)="fetchAddress()">Get User [0] Address</ion-button>
+
   <ion-button expand="full" (click)="checkContractOwner()">Check Ecosystem Owner</ion-button>
+  
+  <ion-button expand="full" (click)="createOrganization()">Create Organization</ion-button>
+  <ion-button expand="full" (click)="retrieveBalance()">Retrieve Balance (user 1)</ion-button>
 
 
 </ion-content>

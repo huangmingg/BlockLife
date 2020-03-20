@@ -68,9 +68,8 @@ web3.eth.getAccounts()
     EcosystemContract.deploy()
     .send({
         from: accounts[0],
-        gas: 1500000,
-        gasPrice: '3000000'
-    })
+        gas: 1000000
+          })
     .then(function(ecosystemInstance){
         global.ecosystemInstance = ecosystemInstance
         console.log(`Ecosystem Contract has been deployed at : ${ecosystemInstance.options.address} by ${accounts[0]}`)
