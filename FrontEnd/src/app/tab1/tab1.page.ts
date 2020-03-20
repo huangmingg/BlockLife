@@ -9,14 +9,8 @@ const IP_ADDRESS = "http://localhost:3000";
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-<<<<<<< HEAD
-  accountAddress = ""
-  
-  constructor() {}
-=======
 
   constructor(private route: Router) {}
->>>>>>> 28a73791a0fec4fc544b4cb38e97d2350c1e7881
 
   async fetchAddress() {    
       await fetch(IP_ADDRESS + '/truffle/fetchAddress', {
