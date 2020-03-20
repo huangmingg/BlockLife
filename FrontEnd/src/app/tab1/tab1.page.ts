@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 const IP_ADDRESS = "http://localhost:3000";
+
 
 @Component({
   selector: 'app-tab1',
@@ -8,7 +10,7 @@ const IP_ADDRESS = "http://localhost:3000";
 })
 export class Tab1Page {
 
-  constructor() {}
+  constructor(private route: Router) {}
 
   fetchAddress() {
     return new Promise(function(resolve, reject) {
@@ -51,6 +53,10 @@ export class Tab1Page {
       });
 
     });
+  }
+
+  loginPage() {
+    this.route.navigate(['/tabs/tab2']);
   }
 
 
