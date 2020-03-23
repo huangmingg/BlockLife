@@ -13,9 +13,12 @@
     </ion-toolbar>
   </ion-header>
   <ion-button expand="full" (click)="fetchAddress()">Get User [0] Address</ion-button>
+  <ion-card-title> {{accountAddress}} </ion-card-title>
 
-  <ion-button expand="full" (click)="checkContractOwner()">Check Ecosystem Owner</ion-button>
-  <ion-button (click)="loginPage()">Go to Login Page</ion-button>
+  <ion-button expand="full" (click)="fetchProfile()">Get User [0] Profile</ion-button>
 
+  <ion-list *ngFor="let hash of interactionHashes">
+    <ion-item>{{hash.description}}</ion-item>
+  </ion-list>
 
 </ion-content>

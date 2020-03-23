@@ -1,5 +1,5 @@
 // const ERC20 = artifacts.require("ERC20");
-const Ecosystem = artifacts.require("Ecosystem");
+const Ecosystem = artifacts.require("BlockEcosystem");
 
 module.exports = function(deployer) {
   deployer.then(() => {

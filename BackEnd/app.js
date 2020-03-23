@@ -3,15 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mysql = require('mysql');
 var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
 
-
 var indexRouter = require('./routes/index');
 var truffleRouter = require('./routes/truffle');
+// var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -36,7 +35,7 @@ app.options('*', cors(corsOptions))
 
 app.use('/', indexRouter);
 app.use('/truffle', truffleRouter);
-
+// app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -55,29 +54,12 @@ app.use(function(err, req, res, next) {
 });
 
 
+// import startNetwork from ;
+var devTools = require('./development.js');
 
-// Contract deployment -- Only used during development
-var EcosystemJSON = require("./build/contracts/Ecosystem.json");
-let abi = EcosystemJSON.abi;
-let EcosystemContract = new web3.eth.Contract(abi);
-EcosystemContract.options.data =  EcosystemJSON.bytecode;
+devTools.startNetwork();
 
-web3.eth.getAccounts()
-.then(function(result){ 
-    global.accounts = result
-    EcosystemContract.deploy()
-    .send({
-        from: accounts[0],
-        gas: 1000000
-          })
-    .then(function(ecosystemInstance){
-        global.ecosystemInstance = ecosystemInstance
-        console.log(`Ecosystem Contract has been deployed at : ${ecosystemInstance.options.address} by ${accounts[0]}`)
-    })
-    .catch(function(error) {
-      console.log(error)
-    })    
-});
+module.exports = app;
 
 
 module.exports = app;
