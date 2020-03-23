@@ -5,3 +5,9 @@
 .idea/checkstyle-idea.xml
 .idea/LifeBlock.iml
 .idea/.gitignore
+TruffleNetwork/build/contracts/ERC20.json
+BackEnd/package-lock.json
+BackEnd/package.json
+TruffleNetwork/build/contracts/SafeMath.json
+FrontEnd/package.json
+FrontEnd/package-lock.json
