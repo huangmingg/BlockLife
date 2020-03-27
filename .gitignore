@@ -5,11 +5,3 @@
 .idea/misc.xml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/.gitignore
-BackEnd/package.json
-BackEnd/package-lock.json
-BackEnd/build/contracts/Migrations.json
-BackEnd/build/contracts/Ecosystem.json
-FrontEnd/package.json
-FrontEnd/package-lock.json
-BackEnd/build/contracts/BlockEcosystem.json
-BackEnd/build/contracts/SafeMath.json
