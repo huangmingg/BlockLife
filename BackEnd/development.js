@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 var _ = require('underscore');
-
+const IPFS = require('./IPFS');
 // Contract deployment -- Only used during development 
 
 var EcosystemJSON = require("./build/contracts/BlockEcosystem.json");
@@ -18,8 +18,6 @@ const institutionsList = ["Facebook","Amazon","Apple","Netflix","Google"]
 function generateRandom(b) {
     return Math.floor((Math.random() * b));
 }
-
-
 
 async function parseInstitutions () {
         for (i in institutionsList) {
@@ -64,6 +62,7 @@ async function startNetwork () {
             await parseInstitutions();
             await registerStakeholders();
             await fillData();
+            await IPFS.setup();
             })
     .catch(function(error) {
       console.log(error)
