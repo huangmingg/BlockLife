@@ -62,7 +62,7 @@ async function startNetwork () {
             await parseInstitutions();
             await registerStakeholders();
             await fillData();
-            await IPFS.setup();
+            //await IPFS.setup();
             })
     .catch(function(error) {
       console.log(error)
