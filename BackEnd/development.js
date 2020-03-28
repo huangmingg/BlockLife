@@ -15,11 +15,10 @@ let institutions = [];
 
 const institutionsList = ["Facebook","Amazon","Apple","Netflix","Google"]
 
+
 function generateRandom(b) {
     return Math.floor((Math.random() * b));
 }
-
-
 
 async function parseInstitutions () {
         for (i in institutionsList) {
@@ -49,7 +48,6 @@ async function fillData() {
             await ecosystemInstance.methods.addInteraction(randomHash, user).send({from : institutions[i]['ethAddress'], gas : 1000000});
         }
     }
-
 }
 
 async function startNetwork () {

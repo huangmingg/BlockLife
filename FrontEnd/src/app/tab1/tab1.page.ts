@@ -1,46 +1,23 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
-const IP_ADDRESS = "http://localhost:3000";
+import { Interaction } from './tab1.model';
+import { InteractionService } from '../interaction.service';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
+
 export class Tab1Page {
-  accountAddress = ""
-  interactionHashes = []
+  interactions: Interaction[] = []
 
-  constructor(private route: Router) {}
+  constructor(private interactionService: InteractionService) {}
 
-  async fetchAddress() {    
-      await fetch(IP_ADDRESS + '/truffle/fetchAddress', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'}
-      })
-      .catch((error) => {console.log(error)})
-      .then((response : Response) => response.json())
-      .then((res) => {this.accountAddress = res.message});
+  ngOnInit() {
+    this.retrieveAllInteractions();
   }
 
-  async fetchProfile() {
-    await fetch(IP_ADDRESS + '/truffle/profile', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'}
-      })
-      .catch((error) => {console.log(error)})
-      .then((response : Response) => response.json())
-      .then((res) => {this.interactionHashes = res.message});
+  async retrieveAllInteractions() {
+    this.interactions = await this.interactionService.retrieveAllInteractions();
   }
-
-  loginPage() {
-    this.route.navigate(['/tabs/tab2']);
-  }
-
-
 }

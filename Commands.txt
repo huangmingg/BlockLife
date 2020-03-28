@@ -1,3 +1,2 @@
-ganache-cli --seed IS4302 -e 10000 
-
+ganache-cli --seed IS4302 -e 10000000000000 -l 80000000
 // tree nerve truly wasp episode motion peanut become census glance plastic caught

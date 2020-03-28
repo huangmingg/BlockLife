@@ -5,20 +5,16 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-button expand="full" (click)="fetchAddress()">Get User [0] Address</ion-button>
-  <ion-card-title> {{accountAddress}} </ion-card-title>
 
-  <ion-button expand="full" (click)="fetchProfile()">Get User [0] Profile</ion-button>
-
-  <ion-list *ngFor="let hash of interactionHashes">
-    <ion-item>{{hash.description}}</ion-item>
+  <ion-list *ngFor="let interaction of interactions">
+    <ion-item>
+      <ion-label> {{ interaction.id }}</ion-label>
+      <ion-title> {{ interaction.hash }}</ion-title> 
+      <ion-avatar>
+        <ion-img [src]="interaction.imageUrl"></ion-img>
+      </ion-avatar>
+    </ion-item>
   </ion-list>
 
 </ion-content>
