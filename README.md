@@ -31,6 +31,8 @@ nodemon www // do not close
 ###### Go to the FrontEnd folder and install the required packages (Deployed at http://localhost:8100/)
 cd FrontEnd && npm install
 <br>
+npm i @angular-devkit/build-angular@0.803.24 //to avoid an error
+
 ionic serve // do not close
 
 
