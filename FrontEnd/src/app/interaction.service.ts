@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interaction } from './tab1/tab1.model';
+import { Interaction } from './individual-stack/tab1/tab1.model';
 
 const IP_ADDRESS = "http://localhost:3000";
 

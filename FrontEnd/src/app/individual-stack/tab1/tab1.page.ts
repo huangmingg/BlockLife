@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Interaction } from './tab1.model';
-import { InteractionService } from '../interaction.service';
+import { InteractionService } from '../../interaction.service';
 
 @Component({
   selector: 'app-tab1',
