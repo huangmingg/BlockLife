@@ -57,7 +57,7 @@ router.get('/identity', cors(), async function(req,res,next) {
 
 // Retrieving of hash, available to public
 router.get('/profile', cors(), async function(req, res, next) {
-  var address = accounts[1]
+  var address = req.query.address;
   await ecosystemInstance.methods.getInteraction(address).call({from : address,  gas: 1000000})
   .then((result) => {
     if (result) {

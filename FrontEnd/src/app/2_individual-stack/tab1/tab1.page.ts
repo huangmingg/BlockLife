@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Interaction } from './tab1.model';
-import { InteractionService } from '../../interaction.service';
+import { InteractionService } from '../../7_services/interaction/interaction.service';
 
 @Component({
   selector: 'app-tab1',
@@ -14,10 +14,11 @@ export class Tab1Page {
   constructor(private interactionService: InteractionService) {}
 
   ngOnInit() {
-    this.retrieveAllInteractions();
+    var address = "0x8B6796841E411e725C16F18894c734FA44Fc0cD5"
+    this.retrieveAllInteractions(address);
   }
 
-  async retrieveAllInteractions() {
-    this.interactions = await this.interactionService.retrieveAllInteractions();
+  async retrieveAllInteractions(address : string) {
+    this.interactions = await this.interactionService.retrieveAllInteractions(address);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interaction } from './individual-stack/tab1/tab1.model';
+import { Interaction } from '../../2_individual-stack/tab1/tab1.model';
 
 const IP_ADDRESS = "http://localhost:3000";
 
@@ -12,8 +12,8 @@ export class InteractionService {
 
   constructor() {}
 
-  async retrieveAllInteractions() {
-    await this.fetchInteractions();
+  async retrieveAllInteractions(address : string) {
+    await this.fetchInteractions(address);
     return [...this.interactions];
   }
 
@@ -23,8 +23,8 @@ export class InteractionService {
     })
   }
 
-  async fetchInteractions() {
-    await fetch(IP_ADDRESS + '/truffle/profile', {
+  async fetchInteractions(address : string) {
+    await fetch(IP_ADDRESS + '/truffle/profile?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

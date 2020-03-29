@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ValidationService } from '../validation.service';
+import { ValidationService } from '../7_services/validation/validation.service';
 
 const IP_ADDRESS = "http://localhost:3000";
 
