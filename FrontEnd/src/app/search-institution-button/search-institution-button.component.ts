@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ValidationService } from '../validation.service';
+
 const IP_ADDRESS = "http://localhost:3000";
 
 @Component({
@@ -9,18 +12,26 @@ const IP_ADDRESS = "http://localhost:3000";
 
 export class SearchInstitutionButtonComponent implements OnInit {
   institutionAddress : string
-  constructor() { }
+  feedbacks = []
+  // myControl = new FormControl('value', this.validateAddress(address));
+
+  constructor(private validationService: ValidationService) {}
 
   ngOnInit() {}
 
+  validateInput(address) {
+    this.institutionAddress = address
+    var bool = this.validationService.validateAddress(address);
+    var message = bool ? "Validated" : "Invalidated"
+    console.log(message);
+  }
+
   handleClick() {
-    console.log("slurp me");
-    console.log(this.institutionAddress);
     this.fetchFeedback(this.institutionAddress);
   }
 
   async fetchFeedback(institution : string) {
-    await fetch(IP_ADDRESS + '/truffle/feedback?address=' + (institution), {
+    await fetch(IP_ADDRESS + '/truffle/feedback?address=' + [institution] , {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -29,7 +40,7 @@ export class SearchInstitutionButtonComponent implements OnInit {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        console.log(res.message)
+        this.feedbacks = res.message
       })
   }
 }

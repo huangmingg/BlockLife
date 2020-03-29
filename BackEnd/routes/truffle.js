@@ -29,7 +29,6 @@ async function hashToFile(hash) {
   return imageURL;
 }
 
-
 async function handleHashes(hashArray) {
   output = []
   for (i in hashArray) {
@@ -61,7 +60,7 @@ router.get('/fetchAddress', cors(), async function(req, res, next) {
 
 // Retrieving of hash, available to public
 router.get('/profile', cors(), async function(req, res, next) {
-  var address = accounts[0]
+  var address = accounts[1]
   await ecosystemInstance.methods.getInteraction(address).call({from : address,  gas: 1000000})
   .then((result) => {
     if (result) {
@@ -114,8 +113,10 @@ router.post('/feedback', cors(), async function(req, res, next) {
 // Retrieving of feedback, available to public
 router.get('/feedback', cors(), async function(req, res, next) {
   var address = req.query.address
+  console.log(address);
   await ecosystemInstance.methods.getFeedback(address).call({from : address,  gas: 1000000})
   .then((result) => {
+    console.log(result)
     if (!result) {
       res.send({'success' : false, 'message' : "Invalid address"})
     } else {
