@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidationService } from '../7_services/validation/validation.service';
+import { Feedback } from '../7_services/feedback/feedback.model';
+import { FeedbackService } from '../7_services/feedback/feedback.service';
 
 const IP_ADDRESS = "http://localhost:3000";
 
@@ -12,10 +14,10 @@ const IP_ADDRESS = "http://localhost:3000";
 
 export class SearchInstitutionButtonComponent implements OnInit {
   institutionAddress : string
-  feedbacks = []
+  feedbacks : Feedback[] = []
   // myControl = new FormControl('value', this.validateAddress(address));
 
-  constructor(private validationService: ValidationService) {}
+  constructor(private validationService: ValidationService, private feedbackService: FeedbackService) {}
 
   ngOnInit() {}
 
@@ -27,20 +29,11 @@ export class SearchInstitutionButtonComponent implements OnInit {
   }
 
   handleClick() {
-    this.fetchFeedback(this.institutionAddress);
+    this.retrieveAllFeedback(this.institutionAddress);
+  }
+  
+  async retrieveAllFeedback(address : string) {
+    this.feedbacks = await this.feedbackService.retrieveAllFeedback(address);
   }
 
-  async fetchFeedback(institution : string) {
-    await fetch(IP_ADDRESS + '/truffle/feedback?address=' + [institution] , {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'}
-      })
-      .catch((error) => {console.log(error)})
-      .then((response : Response) => response.json())
-      .then((res) => {
-        this.feedbacks = res.message
-      })
-  }
 }
