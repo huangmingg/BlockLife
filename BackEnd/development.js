@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 var _ = require('underscore');
-
+const IPFS = require('./IPFS');
 // Contract deployment -- Only used during development 
 
 // DEFAULT 
@@ -91,6 +91,7 @@ async function startNetwork () {
             await parseInstitutions();
             await registerStakeholders();
             await fillData();
+            //await IPFS.setup();
             })
     .catch(function(error) {
       console.log(error)
