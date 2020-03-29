@@ -44,19 +44,16 @@ async function handleHashes(hashArray) {
 }
 
 
-router.get('/fetchAddress', cors(), async function(req, res, next) {
-  web3.eth.getAccounts()
-  .then(function(result){
-    account = result[0];
-    console.log(account)
-    res.send({'success' : true, 'message':account});
-
+router.get('/identity', cors(), async function(req,res,next) {
+  var address = req.query.address;
+  await ecosystemInstance.methods.checkUserIdentity(address).call({from : address,  gas: 1000000})
+  .then((result) => {
+    res.send({'success' : true, 'message' : result})
   })
-  .catch(function(error) {
-    console.log(error)
-    res.send({'success' : false, 'message': error});
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
   })
-});
+})
 
 // Retrieving of hash, available to public
 router.get('/profile', cors(), async function(req, res, next) {
@@ -129,6 +126,23 @@ router.get('/feedback', cors(), async function(req, res, next) {
   })
   .catch((err) => {
     res.send({'success' : false, 'message' : err})
+  })
+});
+
+
+
+
+router.get('/fetchAddress', cors(), async function(req, res, next) {
+  web3.eth.getAccounts()
+  .then(function(result){
+    account = result[0];
+    console.log(account)
+    res.send({'success' : true, 'message':account});
+
+  })
+  .catch(function(error) {
+    console.log(error)
+    res.send({'success' : false, 'message': error});
   })
 });
 

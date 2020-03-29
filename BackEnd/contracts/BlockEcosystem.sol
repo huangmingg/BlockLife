@@ -8,10 +8,11 @@ contract BlockEcosystem {
 
     address contractOwner;
 
-    enum Identity { undefined, individual, institution }
+    enum Identity { undefined, individual, institution, owner }
 
     constructor() public {
         contractOwner = msg.sender;
+        userIdentity[msg.sender] = Identity.owner;
     }
 
     mapping(address => bytes[]) individualProfile;
@@ -63,6 +64,10 @@ contract BlockEcosystem {
 
     function getFeedback(address institution) public view returns (bytes[] memory) {
         return organizationFeedback[institution];
+    }
+
+    function checkUserIdentity(address userAddress) public view returns (Identity) {
+        return userIdentity[userAddress];
     }
 
 }
