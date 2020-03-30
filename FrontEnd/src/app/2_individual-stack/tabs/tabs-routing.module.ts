@@ -28,6 +28,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'submitFeedback',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../submitFeedback/submitFeedback.module').then(m => m.SubmitFeedbackModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/individual/profile',
         pathMatch: 'full'
