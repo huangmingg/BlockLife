@@ -1,30 +1,29 @@
 const IPFS = require('ipfs');
+const { globSource } = IPFS;
 let IPFSnode;
 
 //IPFS structure
 //root/<Ethereum address>/<cert>
 
-export async function setup() {
-    IPFSnode  = await IPFS.create();
+async function send(address) {
+
+    for await (const file of IPFSnode.add(globSource(address))) {
+        return file.cid
+    }
 }
 
-export async function send(address, fileToSend) {
-    let file = {path: address+'/'+fileToSend.name, content:fileToSend};
-    return await ipfs.add(file).hash;
-}
-
-export async function retrieve(hash) {
-    let buffer = await ipfs.cat(hash) //returns buffer. need to convert to something usable
-    //buffer.toString('utf8')
-
+async function retrieve(hash) {
+     for await ( const file of IPFSnode.cat(hash)) { //returns buffer. need to convert to something usable
+         return file
+     }
 }
 
 //FOR TESTING
 async function main () {
-    const node = await IPFS.create()
-    const version = await node.version()
-    console.log('Version:', version.version)
-    // ...
+    IPFSnode = await IPFS.create();
+    let hash = await send('./test.jpg');
+    let test = await retrieve(hash);
+    console.log("Test file in string form: " + test.toString());
 }
 
-main()
+//main();

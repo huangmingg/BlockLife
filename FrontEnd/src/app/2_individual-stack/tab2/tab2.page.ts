@@ -5,8 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page {
 
+
+export class Tab2Page {
+  // tab 2 should contain search organization component
   constructor() {}
 
 }
