@@ -11,7 +11,7 @@ Once done, run the following command to deploy blockchain server (default at 127
 <br>
 ganache-cli --seed IS4302 -e 10000000000000 -l 80000000  // do not close
 ###### Go to the TruffleNetwork folder
-
+cd BackEnd
 npm install @openzeppelin/contracts // to download and install dependencies
 
 truffle migrate // to compile and deploy the contracts on the server
