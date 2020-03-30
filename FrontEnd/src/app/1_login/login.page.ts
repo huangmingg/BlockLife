@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
     // 2 => registered institution
     // 3 => owner
     if (userIdentity == 1) {
-      this.route.navigate(['/tabs']);
+      this.route.navigate(['/individual']);
     } else if (userIdentity == 2) {
       this.route.navigate(['/institution']);
     } else if (userIdentity == 3) {

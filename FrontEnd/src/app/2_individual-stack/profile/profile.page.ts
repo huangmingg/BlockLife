@@ -3,12 +3,12 @@ import { Interaction } from '../../7_services/interaction/interaction.model';
 import { InteractionService } from '../../7_services/interaction/interaction.service';
 
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-profile',
+  templateUrl: 'profile.page.html',
+  styleUrls: ['profile.page.scss']
 })
 
-export class Tab1Page {
+export class ProfilePage {
   interactions: Interaction[] = []
 
   constructor(private interactionService: InteractionService) {}
@@ -21,5 +21,9 @@ export class Tab1Page {
 
   async retrieveAllInteractions(address : string) {
     this.interactions = await this.interactionService.retrieveAllInteractions(address);
+  }
+
+  async remove(item) {
+    console.log(item);
   }
 }
