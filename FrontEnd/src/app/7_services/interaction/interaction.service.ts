@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Interaction } from '../../2_individual-stack/tab1/tab1.model';
-
-const IP_ADDRESS = "http://localhost:3000";
+import Config from '../../env.js'
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,7 @@ export class InteractionService {
   }
 
   async fetchInteractions(address : string) {
-    await fetch(IP_ADDRESS + '/truffle/profile?address=' + (address), {
+    await fetch(Config.IP_ADDRESS + '/truffle/profile?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

@@ -4,9 +4,6 @@ import { IdentificationService } from '../7_services/identification/identificati
 import { AuthenticationService } from '../7_services/authentication/authentication.service';
 import Web3 from 'web3';
 import { WEB3 } from '../web3'
-// var sigUtil = require('eth-sig-util')
-var Eth = require('ethjs')
-var ethUtil = require('ethereumjs-util');
 
 @Component({
   selector: 'app-login',
@@ -20,7 +17,7 @@ export class LoginPage implements OnInit {
     private route: Router, 
     private identificationService: IdentificationService,
     private authenticationService: AuthenticationService) {}
-  
+    
   ngOnInit() {
   }
 
@@ -29,8 +26,10 @@ export class LoginPage implements OnInit {
     var challenge = await this.generateChallenge(address);
     var signature = await this.signChallenge(challenge, address);
     var message = challenge[1]['value']
-    await this.sendChallenge(message, signature);
-
+    var result = await this.sendChallenge(message, signature);
+    if (!result) {alert("Authentication failed, please try again!");return;} 
+    var identity = await this.identificationService.getIdentity(address);
+    this.handleIdentity(identity);
   }
 
   async metaMaskInjection() {
@@ -51,49 +50,45 @@ export class LoginPage implements OnInit {
     const params = [challenge, from];
     const method = 'eth_signTypedData';
     const provider = this.web3.currentProvider;
-    return new Promise(function(resolve, reject) {
+    return new Promise<string>(function(resolve, reject) {
+      let output : string;
       provider.sendAsync({
         method,
         params,
         from
       }, async (err, result) => {
         if (err) {
-          reject(err)
+          output = err
+          reject(output)
         }
         if (result.error) {
-          reject(result.error)
+          output = result.error
+          reject(output)
         }
-        resolve(result.result)
+        output = result.result
+        resolve(output)
       })
     });
   } 
 
   async sendChallenge(message : string, signature : string) {
-    await this.authenticationService.authenticateUser(message, signature);
+    var result : boolean = await this.authenticationService.authenticateUser(message, signature);
+    return result;
   }
 
-  async login() {
-    // Should first verify using meta-auth, after that check if user is a registered organization, individual, or unregistered
-    // address is static until meta-auth is implemented
-    // var address = "0xB422d54Cc2b92A2462f035E31d34e11e61ff54a1" // registered individual
-    // var address = "0xEa9764d165461e4e729886A023b2BBd389CDA959" // owner
-    var address = "0xEa27b334967Fa7864748c39918EA6234Cd420747" // institution
-
-    var userIdentity = await this.identificationService.getIdentity(address);
-    console.log(`User Identity is ${userIdentity}`);
-    // Based on user identity, will bring to different pages 
-    // 1 => registered individual
-    // 2 => registered institution
-    // 3 => owner
-    if (userIdentity == 1) {
+  // 1 represents registered individual
+  // 2 represents registered institutions
+  // 3 represents contract owner
+  // else (0) represents new user
+  async handleIdentity(identity : number) {
+    if (identity == 1) {
       this.route.navigate(['/tabs']);
-    } else if (userIdentity == 2) {
+    } else if (identity == 2) {
       this.route.navigate(['/institution']);
-    } else if (userIdentity == 3) {
+    } else if (identity == 3) {
       this.route.navigate(['/owner']);
     } else {
       this.route.navigate(['/tabs']);
     }
-
   }
 }

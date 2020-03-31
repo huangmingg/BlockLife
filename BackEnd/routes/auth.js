@@ -3,11 +3,6 @@ var router = express.Router();
 var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
-const cache = require("memory-cache");
-const crypto = require('crypto');
-const eutil = require('ethereumjs-util');
-const { uuid } = require('uuidv4');
-
 
 const MetaAuth = require('meta-auth');
 const metaAuth = new MetaAuth({

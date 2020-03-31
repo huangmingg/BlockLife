@@ -7,18 +7,6 @@ var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
-// Setting up of the sqlite3 server
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(':memory:');
-global.db = db;
-
-db.serialize(function() {
-  db.run("CREATE TABLE userCredentials (address TEXT, nounce TEXT)");
-  var address = "0x1F15d5E91772335A5E247865cf694b744099fAfc"
-  var nounce = "123"
-  db.run("INSERT INTO userCredentials VALUES (?,?)", address,nounce)
-});
-
 var indexRouter = require('./routes/index');
 var truffleRouter = require('./routes/truffle');
 var authRouter = require('./routes/auth');

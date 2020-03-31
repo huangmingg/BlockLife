@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-const IP_ADDRESS = "http://localhost:3000";
+import Config from '../../env.js'
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +10,18 @@ export class AuthenticationService {
 
   constructor() { }
 
-
-
   async generateChallenge(address : string) {
-    await this.retrieveChallenge(address);
+    await this._retrieveChallenge(address);
     return this.generatedChallenge;
   }
 
-  
-  async retrieveChallenge(address : string) {
-    await fetch(IP_ADDRESS + '/auth/metaMask/' + [address], {
+  async authenticateUser(message : string, signature : string) {
+    await this._authenticateUser(message, signature);
+    return this.isAuthenticated;
+  }
+
+  private async _retrieveChallenge(address : string) {
+    await fetch(Config.IP_ADDRESS + '/auth/metaMask/' + [address], {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -34,12 +36,10 @@ export class AuthenticationService {
           alert("Failed to receive challenge message!")
         }
       });
-
   }
 
-
-  async authenticateUser(message : string, signature : string) {
-    await fetch(IP_ADDRESS + '/auth/metaMask/' + [message] + "/" + [signature], {
+  private async _authenticateUser(message : string, signature : string) {
+    await fetch(Config.IP_ADDRESS + '/auth/metaMask/' + [message] + "/" + [signature], {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -48,7 +48,9 @@ export class AuthenticationService {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        console.log(res);
+        if (res.success) {
+          this.isAuthenticated = true;
+        }
     });
   }
 

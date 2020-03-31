@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ValidationService } from '../7_services/validation/validation.service';
-
-const IP_ADDRESS = "http://localhost:3000";
+import Config from '../env.js'
 
 @Component({
   selector: 'app-search-institution-button',
@@ -31,7 +30,7 @@ export class SearchInstitutionButtonComponent implements OnInit {
   }
 
   async fetchFeedback(institution : string) {
-    await fetch(IP_ADDRESS + '/truffle/feedback?address=' + [institution] , {
+    await fetch(Config.IP_ADDRESS + '/truffle/feedback?address=' + [institution] , {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

@@ -3,6 +3,7 @@ var router = express.Router();
 var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+var devTools = require('../development.js');
 
 
 
@@ -45,8 +46,9 @@ async function handleHashes(hashArray) {
 
 
 router.get('/identity', cors(), async function(req,res,next) {
-  var address = req.query.address;
-  await ecosystemInstance.methods.checkUserIdentity(address).call({from : address,  gas: 1000000})
+  var address = req.query.address.toString().toLowerCase();
+  var mappedAddress = global.hardMap[address];
+  await ecosystemInstance.methods.checkUserIdentity(mappedAddress).call({from : mappedAddress,  gas: 1000000})
   .then((result) => {
     res.send({'success' : true, 'message' : result})
   })
