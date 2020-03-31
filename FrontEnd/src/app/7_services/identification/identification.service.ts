@@ -16,7 +16,7 @@ export class IdentificationService {
   }
 
   async checkIdentity(address : string) {
-    await fetch(IP_ADDRESS + '/truffle/identity?address=' + [address], {
+    await fetch(IP_ADDRESS + '/auth/auth/?address=' + [address], {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

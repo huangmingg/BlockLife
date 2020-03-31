@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interaction } from './interaction.model';
+import { Interaction } from '../../2_individual-stack/tab1/tab1.model';
 
 const IP_ADDRESS = "http://localhost:3000";
 
@@ -35,30 +35,6 @@ export class InteractionService {
       .then((res) => {
         this.interactions = res.message
       })
-  }
-
-
-  async addInteraction(file: string, recipient: string, institution: string) {
-    await fetch(IP_ADDRESS + '/truffle/hash', {
-      method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              file: file,
-              recipient: recipient,
-              institution: institution
-            }) 
-        })
-      .catch((error) => {console.log(error)})
-      .then((response : Response) => response.json())
-      .then((res) => {
-        console.log(res);
-        // this.interactions = res.message
-      })
-  
-
   }
 
 }

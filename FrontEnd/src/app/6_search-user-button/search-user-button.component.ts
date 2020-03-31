@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidationService } from '../7_services/validation/validation.service';
-import { Interaction } from '../7_services/interaction/interaction.model';
+import { Interaction } from '../2_individual-stack/tab1/tab1.model';
 import { InteractionService } from '../7_services/interaction/interaction.service';
 
 const IP_ADDRESS = "http://localhost:3000";

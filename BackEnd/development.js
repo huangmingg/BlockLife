@@ -74,7 +74,9 @@ async function fillData() {
                 console.log(`Adding Feedback ${feedBack} from ${users[k]['userName']} to ${institutions[i]['institutionName']}`)
                 await ecosystemInstance.methods.addFeedback(feedBack, institutions[i]['ethAddress']).send({from : users[k]['ethAddress'], gas : 1000000})
             }
+            break;
         }
+        break;
     }
 }
 
