@@ -121,7 +121,7 @@ router.get('/feedback', cors(), async function(req, res, next) {
     } else {
       output = []
       for (i in result) {
-        output.push({'description' :result[i]})
+        output.push({'description' : web3.utils.hexToAscii(result[i])})
       }
       res.send({'success' : true, 'message' : output})  
     }
