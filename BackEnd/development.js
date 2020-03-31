@@ -90,12 +90,13 @@ async function fillData() {
         for (k in users) {
             numberInteractions = 1 + generateRandom(5);
             for (var j = 0; j < numberInteractions; j++) {
+                var timestamp = Date.now()
                 var randomHash = web3.utils.keccak256(web3.utils.randomHex(36));
                 var feedBack = web3.utils.asciiToHex(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 20));
                 console.log(`Adding Interaction ${randomHash} from ${institutions[i]['institutionName']} to ${users[k]['userName']}`)
-                await ecosystemInstance.methods.addInteraction(randomHash, users[k]['ethAddress']).send({from : institutions[i]['ethAddress'], gas : 1000000});
+                await ecosystemInstance.methods.addInteraction(randomHash, timestamp, users[k]['ethAddress']).send({from : institutions[i]['ethAddress'], gas : 1000000});
                 console.log(`Adding Feedback ${feedBack} from ${users[k]['userName']} to ${institutions[i]['institutionName']}`)
-                await ecosystemInstance.methods.addFeedback(feedBack, institutions[i]['ethAddress']).send({from : users[k]['ethAddress'], gas : 1000000})
+                await ecosystemInstance.methods.addFeedback(feedBack, timestamp, institutions[i]['ethAddress']).send({from : users[k]['ethAddress'], gas : 1000000})
             }
             break;
         }

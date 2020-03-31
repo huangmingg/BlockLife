@@ -28,11 +28,14 @@ async function hashToFile(hash) {
 async function handleHashes(hashArray) {
   output = []
   for (i in hashArray) {
-      var hash = hashArray[i]
+      var interactionObject = hashArray[i]
+      var dateTime = interactionObject['dateTime']
+      var hash = interactionObject['interactionHash'] 
       var hashImage = await hashToFile(hash);
       output.push({
         id : i,
         hash : hash,
+        dateTime : dateTime,
         imageUrl : hashImage 
       })
   }
@@ -60,7 +63,7 @@ router.post('/register/user', cors(), async function(req, res, next) {
   if (!web3.isAddress(address)) return;
   await ecosystemInstance.methods.registerIndividual().send({from : address, gas : 1000000})
   .then((result) => {
-    console.log(result)
+    // console.log(result)
     res.send({'success' : true, 'message' : `User ${address} has been successfully registered`})
   })
   .catch((err) => {
