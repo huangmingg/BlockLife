@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IdentificationService } from '../7_services/identification/identification.service';
 import { AuthenticationService } from '../7_services/authentication/authentication.service';
+import { RegisterService } from '../7_services/register/register.service';
 import Web3 from 'web3';
 import { WEB3 } from '../web3'
 
@@ -11,18 +12,21 @@ import { WEB3 } from '../web3'
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
+  userAddress : string = ""
   constructor(
     @Inject(WEB3) private web3: Web3,
     private route: Router, 
     private identificationService: IdentificationService,
-    private authenticationService: AuthenticationService) {}
+    private authenticationService: AuthenticationService,
+    private registerService : RegisterService
+    ) {}
     
   ngOnInit() {
   }
 
   async handleClick() {
     var address = await this.metaMaskInjection();
+    this.userAddress = address;
     var challenge = await this.generateChallenge(address);
     var signature = await this.signChallenge(challenge, address);
     var message = challenge[1]['value']
@@ -81,13 +85,14 @@ export class LoginPage implements OnInit {
   // 3 represents contract owner
   // else (0) represents new user
   async handleIdentity(identity : number) {
-    if (identity == 1) {
-      this.route.navigate(['/tabs']);
-    } else if (identity == 2) {
+    if (identity == 2) {
       this.route.navigate(['/institution']);
     } else if (identity == 3) {
       this.route.navigate(['/owner']);
     } else {
+      if (identity == 0) {
+        this.registerService.registerUser(this.userAddress);
+      }
       this.route.navigate(['/tabs']);
     }
   }
