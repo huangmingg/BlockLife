@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab2Page } from './tab2.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { ProfilePage } from './profile.page';
+import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 
 @NgModule({
   imports: [
@@ -12,8 +12,8 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{ path: '', component: Tab2Page }])
+    RouterModule.forChild([{ path: '', component: ProfilePage }])
   ],
-  declarations: [Tab2Page]
+  declarations: [ProfilePage]
 })
-export class Tab2PageModule {}
+export class ProfilePageModule {}

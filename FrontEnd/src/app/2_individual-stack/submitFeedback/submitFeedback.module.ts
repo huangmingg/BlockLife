@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab2Page } from './tab2.page';
+import { SubmitFeedbackPage } from './submitFeedback.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 import { SearchInstitutionButtonComponentModule } from '../../5_search-institution-button/search-institution-button.module'
 
@@ -15,8 +15,8 @@ import { SearchInstitutionButtonComponentModule } from '../../5_search-instituti
     FormsModule,
     ExploreContainerComponentModule,
     SearchInstitutionButtonComponentModule,
-    RouterModule.forChild([{ path: '', component: Tab2Page }])
+    RouterModule.forChild([{ path: '', component: SubmitFeedbackPage }])
   ],
-  declarations: [Tab2Page]
+  declarations: [SubmitFeedbackPage]
 })
-export class Tab2PageModule {}
+export class SubmitFeedbackModule {}

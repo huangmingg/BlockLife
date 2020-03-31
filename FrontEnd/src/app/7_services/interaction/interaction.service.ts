@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interaction } from '../../2_individual-stack/tab1/tab1.model';
+import { Interaction } from './interaction.model';
 import Config from '../../env.js'
 
 @Injectable({

@@ -93,7 +93,7 @@ export class LoginPage implements OnInit {
       if (identity == 0) {
         this.registerService.registerUser(this.userAddress);
       }
-      this.route.navigate(['/tabs']);
+      this.route.navigate(['/individual']);
     }
   }
 }
