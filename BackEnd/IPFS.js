@@ -26,4 +26,4 @@ async function main () {
     console.log("Test file in string form: " + test.toString());
 }
 
-//main();
+// main();

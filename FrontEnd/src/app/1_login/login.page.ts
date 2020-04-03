@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IdentificationService } from '../7_services/identification/identification.service';
+import { AuthenticationService } from '../7_services/authentication/authentication.service';
+import { RegisterService } from '../7_services/register/register.service';
+import Web3 from 'web3';
+import { WEB3 } from '../web3'
 
 @Component({
   selector: 'app-login',
@@ -8,37 +12,87 @@ import { IdentificationService } from '../7_services/identification/identificati
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-  constructor(private route: Router, private identificationService: IdentificationService) { }
-
+  userAddress : string = ""
+  constructor(
+    @Inject(WEB3) private web3: Web3,
+    private route: Router, 
+    private identificationService: IdentificationService,
+    private authenticationService: AuthenticationService,
+    private registerService : RegisterService
+    ) {}
+    
   ngOnInit() {
-  
-  
   }
 
-  async login() {
-    //log in logic
-    // Should first verify using meta-auth, after that check if user is a registered organization, individual, or unregistered
-    // address is static until meta-auth is implemented
-    var address = "0xB422d54Cc2b92A2462f035E31d34e11e61ff54a1" // registered individual
-    // var address = "0xEa9764d165461e4e729886A023b2BBd389CDA959" // owner
-    // var address = "0xEa27b334967Fa7864748c39918EA6234Cd420747" // institution
+  async handleClick() {
+    var address = await this.metaMaskInjection();
+    this.userAddress = address;
+    var challenge = await this.generateChallenge(address);
+    var signature = await this.signChallenge(challenge, address);
+    var message = challenge[1]['value']
+    var result = await this.sendChallenge(message, signature);
+    if (!result) {alert("Authentication failed, please try again!");return;} 
+    var identity = await this.identificationService.getIdentity(address);
+    this.handleIdentity(identity);
+  }
 
-    var userIdentity = await this.identificationService.getIdentity(address);
-    console.log(`User Identity is ${userIdentity}`);
-    // Based on user identity, will bring to different pages 
-    // 1 => registered individual
-    // 2 => registered institution
-    // 3 => owner
-    if (userIdentity == 1) {
-      this.route.navigate(['/individual']);
-    } else if (userIdentity == 2) {
+  async metaMaskInjection() {
+    if ('enable' in this.web3.currentProvider) {
+      await this.web3.currentProvider.enable();
+    }
+    const accounts = await this.web3.eth.getAccounts();
+    return accounts[0].toLowerCase();
+  }
+
+  async generateChallenge(address : string) {
+    var challengeObject = await this.authenticationService.generateChallenge(address);
+    return challengeObject;
+  }
+
+  async signChallenge(challenge : Object[], address : string) {
+    const from = address;
+    const params = [challenge, from];
+    const method = 'eth_signTypedData';
+    const provider = this.web3.currentProvider;
+    return new Promise<string>(function(resolve, reject) {
+      let output : string;
+      provider.sendAsync({
+        method,
+        params,
+        from
+      }, async (err, result) => {
+        if (err) {
+          output = err
+          reject(output)
+        }
+        if (result.error) {
+          output = result.error
+          reject(output)
+        }
+        output = result.result
+        resolve(output)
+      })
+    });
+  } 
+  async sendChallenge(message : string, signature : string) {
+    var result : boolean = await this.authenticationService.authenticateUser(message, signature);
+    return result;
+  }
+
+  // 1 represents registered individual
+  // 2 represents registered institutions
+  // 3 represents contract owner
+  // else (0) represents new user
+  async handleIdentity(identity : number) {
+    if (identity == 2) {
       this.route.navigate(['/institution']);
-    } else if (userIdentity == 3) {
+    } else if (identity == 3) {
       this.route.navigate(['/owner']);
     } else {
-      this.route.navigate(['/tabs']);
+      if (identity == 0) {
+        this.registerService.registerUser(this.userAddress);
+      }
+      this.route.navigate(['/individual']);
     }
-
   }
 }

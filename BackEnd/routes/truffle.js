@@ -4,13 +4,9 @@ var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
-
-
 function generateRandom(b) {
   return Math.floor((Math.random() * b));
 }
-
-
 
 const randomImageURL = ["https://cdn.mos.cms.futurecdn.net/6h8C6ygTdR2jyyUxkALwsc-1200-80.jpg",
                         "https://www.aspcapro.org/sites/default/files/styles/image_component/public/page/card/image/donkeynose.jpg?itok=s7-KmNux",
@@ -32,11 +28,14 @@ async function hashToFile(hash) {
 async function handleHashes(hashArray) {
   output = []
   for (i in hashArray) {
-      var hash = hashArray[i]
+      var interactionObject = hashArray[i]
+      var dateTime = interactionObject['dateTime']
+      var hash = interactionObject['interactionHash'] 
       var hashImage = await hashToFile(hash);
       output.push({
         id : i,
         hash : hash,
+        dateTime : dateTime,
         imageUrl : hashImage 
       })
   }
@@ -45,8 +44,9 @@ async function handleHashes(hashArray) {
 
 
 router.get('/identity', cors(), async function(req,res,next) {
-  var address = req.query.address;
-  await ecosystemInstance.methods.checkUserIdentity(address).call({from : address,  gas: 1000000})
+  var address = req.query.address.toString().toLowerCase();
+  var mappedAddress = global.hardMap[address];
+  await ecosystemInstance.methods.checkUserIdentity(mappedAddress).call({from : mappedAddress,  gas: 1000000})
   .then((result) => {
     res.send({'success' : true, 'message' : result})
   })
@@ -54,6 +54,37 @@ router.get('/identity', cors(), async function(req,res,next) {
     res.send({'success' : false, 'message' : err})
   })
 })
+
+
+
+// registering of user
+router.post('/register/user', cors(), async function(req, res, next) {
+  var address = req.body.address;
+  if (!web3.isAddress(address)) return;
+  await ecosystemInstance.methods.registerIndividual().send({from : address, gas : 1000000})
+  .then((result) => {
+    // console.log(result)
+    res.send({'success' : true, 'message' : `User ${address} has been successfully registered`})
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+});
+
+// registering of institution
+router.post('/register/institution', cors(), async function(req, res, next) {
+  var institution = req.body.institution;
+  var user = req.body.user;
+  if (!web3.isAddress(institution) || !web3.isAddress(user)) return;
+  await ecosystemInstance.methods.registerInstitution(institution).send({from : user, gas : 1000000})
+  .then((result) => {
+    console.log(result)
+    res.send({'success' : true, 'message' : `Institution ${address} has been successfully registered`})
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+});
 
 // Retrieving of hash, available to public
 router.get('/profile', cors(), async function(req, res, next) {
@@ -119,7 +150,7 @@ router.get('/feedback', cors(), async function(req, res, next) {
     } else {
       output = []
       for (i in result) {
-        output.push({'description' :result[i]})
+        output.push({'description' : web3.utils.hexToAscii(result[i])})
       }
       res.send({'success' : true, 'message' : output})  
     }
@@ -128,25 +159,6 @@ router.get('/feedback', cors(), async function(req, res, next) {
     res.send({'success' : false, 'message' : err})
   })
 });
-
-
-
-
-router.get('/fetchAddress', cors(), async function(req, res, next) {
-  web3.eth.getAccounts()
-  .then(function(result){
-    account = result[0];
-    console.log(account)
-    res.send({'success' : true, 'message':account});
-
-  })
-  .catch(function(error) {
-    console.log(error)
-    res.send({'success' : false, 'message': error});
-  })
-});
-
-
 
 module.exports = router;
 
