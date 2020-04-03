@@ -5,6 +5,10 @@ let IPFSnode;
 //IPFS structure
 //root/<Ethereum address>/<cert>
 
+async function setup() {
+    IPFSnode = await IPFS.create();
+}
+
 async function send(address) {
 
     for await (const file of IPFSnode.add(globSource(address))) {
