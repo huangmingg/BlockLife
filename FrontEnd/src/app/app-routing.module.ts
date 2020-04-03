@@ -4,7 +4,19 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./1_login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./2_individual-stack/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./3_institution-stack/institution/institution.module').then( m => m.InstitutionPageModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./4_owner-stack/owner-stack.module').then( m => m.OwnerStackPageModule)
   }
 ];
 @NgModule({

@@ -8,14 +8,25 @@ contract BlockEcosystem {
 
     address contractOwner;
 
-    enum Identity { undefined, individual, institution }
+    enum Identity { undefined, individual, institution, owner }
+
+    struct Interaction {
+        bytes interactionHash;
+        uint dateTime;
+    }
+
+    struct Feedback {
+        bytes text;
+        uint dateTime;
+    }
 
     constructor() public {
         contractOwner = msg.sender;
+        userIdentity[msg.sender] = Identity.owner;
     }
 
-    mapping(address => bytes[]) individualProfile;
-    mapping(address => bytes[]) organizationFeedback; 
+    mapping(address => Interaction[]) individualProfile;
+    mapping(address => Feedback[]) organizationFeedback; 
     mapping(address => mapping(address => uint)) previousInteraction;
 
     mapping(address => Identity) userIdentity;
@@ -47,22 +58,28 @@ contract BlockEcosystem {
         userIdentity[newInstitution] = Identity.institution;
     }
 
-    function addInteraction(bytes memory interactionHash, address recipient) public isRegisteredInstitution() {
-        individualProfile[recipient].push(interactionHash);
+    function addInteraction(bytes memory interactionHash, uint timestamp, address recipient) public isRegisteredInstitution() {
+        Interaction memory newInteraction = Interaction(interactionHash, timestamp);
+        individualProfile[recipient].push(newInteraction);
         emit AddedInteraction(recipient);
     }
 
-    function getInteraction(address individual) public view returns (bytes[] memory) {
+    function getInteraction(address individual) public view returns (Interaction[] memory) {
         return individualProfile[individual];
     }
 
-    function addFeedback(bytes memory feedbackText, address institution) public {
-        organizationFeedback[institution].push(feedbackText);
+    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public {
+        Feedback memory newFeedback = Feedback(feedbackText, timestamp);
+        organizationFeedback[institution].push(newFeedback);
         emit AddedFeedBack(institution);
     }
 
-    function getFeedback(address institution) public view returns (bytes[] memory) {
+    function getFeedback(address institution) public view returns (Feedback[] memory) {
         return organizationFeedback[institution];
+    }
+
+    function checkUserIdentity(address userAddress) public view returns (Identity) {
+        return userIdentity[userAddress];
     }
 
 }
