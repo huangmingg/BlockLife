@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Welcome</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Created two equal columns that float next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+</style>
+
+<ion-content>
+
+  <div class="row">
+    <div class="column" style="background-color:white;">
+      <figure>
+        <h3><i>About us </i></h3>
+        We aim to solve the difficult and time-consuming process of verifying the validity of an applicant’s background for employers.
+        <br> 
+        <br>
+        We also allow applicants to view trusted feedback on various institutions.
+        <br>
+        <br>
+        <br>
+        <br>
+    
+        <figcaption><i>Powered by</i></figcaption>
+        <br>
+        <br>
+        <img src='../../assets/icon/ethereum.svg' height = "100" width="200">
+      </figure>
+
+    </div>
+    <div class="column" style="background-color:white;">
+      <h2>Log In here!</h2>
+      <ion-button (click)="handleClick()">Login with Metamask</ion-button>
+    </div>
+  </div>
+  
+</ion-content>
