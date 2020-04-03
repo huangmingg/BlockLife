@@ -74,7 +74,6 @@ export class LoginPage implements OnInit {
       })
     });
   } 
-
   async sendChallenge(message : string, signature : string) {
     var result : boolean = await this.authenticationService.authenticateUser(message, signature);
     return result;
