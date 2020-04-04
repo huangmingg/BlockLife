@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Interaction } from './interaction.model';
-import Config from '../../env.js'
+
+const IP_ADDRESS = "http://localhost:3000";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class InteractionService {
   }
 
   async fetchInteractions(address : string) {
-    await fetch(Config.IP_ADDRESS + '/truffle/profile?address=' + (address), {
+    await fetch(IP_ADDRESS + '/truffle/profile?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -34,6 +35,30 @@ export class InteractionService {
       .then((res) => {
         this.interactions = res.message
       })
+  }
+
+
+  async addInteraction(file: string, recipient: string, institution: string) {
+    await fetch(IP_ADDRESS + '/truffle/hash', {
+      method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              file: file,
+              recipient: recipient,
+              institution: institution
+            }) 
+        })
+      .catch((error) => {console.log(error)})
+      .then((response : Response) => response.json())
+      .then((res) => {
+        console.log(res);
+        // this.interactions = res.message
+      })
+  
+
   }
 
 }

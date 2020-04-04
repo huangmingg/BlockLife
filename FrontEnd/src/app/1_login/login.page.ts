@@ -5,6 +5,7 @@ import { AuthenticationService } from '../7_services/authentication/authenticati
 import { RegisterService } from '../7_services/register/register.service';
 import Web3 from 'web3';
 import { WEB3 } from '../web3'
+// import { provider } from 'web3-core';
 
 @Component({
   selector: 'app-login',
@@ -37,8 +38,16 @@ export class LoginPage implements OnInit {
   }
 
   async metaMaskInjection() {
-    if ('enable' in this.web3.currentProvider) {
-      await this.web3.currentProvider.enable();
+    // console.log(this.web3.currentProvider);
+    // readonly currentProvider: provider;
+
+    var provider = this.web3.currentProvider;
+    if ('enable' in provider) {
+      try {
+        await this.web3.currentProvider.enable();
+      } catch(err) {
+        alert(err)
+      }
     }
     const accounts = await this.web3.eth.getAccounts();
     return accounts[0].toLowerCase();
@@ -56,22 +65,24 @@ export class LoginPage implements OnInit {
     const provider = this.web3.currentProvider;
     return new Promise<string>(function(resolve, reject) {
       let output : string;
-      provider.sendAsync({
-        method,
-        params,
-        from
-      }, async (err, result) => {
-        if (err) {
-          output = err
-          reject(output)
-        }
-        if (result.error) {
-          output = result.error
-          reject(output)
-        }
-        output = result.result
-        resolve(output)
-      })
+      try {
+        provider.sendAsync({ method, params, from }, async (err, result) => {
+          if (err) {
+            output = err
+            reject(output)
+          }
+          if (result.error) {
+            output = result.error
+            reject(output)
+          }
+          output = result.result
+          resolve(output)
+        })  
+      } catch (err) {
+        alert(err)
+        reject(err)
+        console.log(err)
+      }
     });
   } 
 

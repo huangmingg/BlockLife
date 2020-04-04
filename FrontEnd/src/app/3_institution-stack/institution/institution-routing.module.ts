@@ -18,12 +18,32 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'search',
+        path: 'search_institution',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../search/search.module').then(m => m.SearchPageModule)
+              import('../searchInstitution/searchInstitution.module').then(m => m.SearchInstitutionPageModule)
+          }
+        ]
+      },
+      {
+        path: 'search_user',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../searchUser/searchUser.module').then(m => m.SearchUserPageModule)
+          }
+        ]
+      },
+      {
+        path: 'upload_interaction',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../uploadInteraction/uploadInteraction.module').then(m => m.UploadInteractionPageModule)
           }
         ]
       },

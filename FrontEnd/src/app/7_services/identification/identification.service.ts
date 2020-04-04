@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import Config from '../../env.js'
+
+const IP_ADDRESS = "http://localhost:3000";
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +11,12 @@ export class IdentificationService {
   constructor() { }
 
   async getIdentity(address : string) {
-    await this._checkIdentity(address);
+    await this.checkIdentity(address);
     return this.userIdentity;
   }
 
-  private async _checkIdentity(address : string) {
-    await fetch(Config.IP_ADDRESS + '/truffle/identity/?address=' + [address], {
+  async checkIdentity(address : string) {
+    await fetch(IP_ADDRESS + '/truffle/identity?address=' + [address], {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
