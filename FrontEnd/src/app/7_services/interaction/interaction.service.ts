@@ -33,7 +33,10 @@ export class InteractionService {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        this.interactions = res.message
+        if (res.success) {
+          this.interactions = res.message
+        }
+        console.log(res)
       })
   }
 

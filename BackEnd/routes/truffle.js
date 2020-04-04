@@ -15,33 +15,48 @@ const randomImageURL = ["https://cdn.mos.cms.futurecdn.net/6h8C6ygTdR2jyyUxkALws
                         "https://media.npr.org/assets/img/2019/04/24/gettyimages-942051048-29251d02758b345d0e722ef87f412b13cc19a265-s800-c85.jpg"
                     ]
 
-// Will interact with IFPS, uploads the file and return the hashed endpoint.
 async function fileToHash(file) {
-  // for now return the hash of file (will use await here)
-  var hash = await IPFSTools.send(file).toString()
-  // var hash = web3.utils.keccak256(file);
+  var hash = await IPFSTools.send(file);
+  console.log(hash)
   return hash;
 }
 
 async function hashToFile(hash) {
-  var imageURL = randomImageURL[generateRandom(randomImageURL.length)]
+  var imageURL = await IPFSTools.retrieve(hash);
   return imageURL;
 }
 
 async function handleHashes(hashArray) {
   output = []
-  for (i in hashArray) {
-      var interactionObject = hashArray[i]
-      var dateTime = interactionObject['dateTime']
-      var hash = interactionObject['interactionHash'] 
-      var hashImage = await hashToFile(hash);
-      output.push({
-        id : i,
-        hash : hash,
-        dateTime : dateTime,
-        imageUrl : hashImage 
-      })
-  }
+  hashArray.forEach(async(element, index) => {
+    var dateTime = element['dateTime'];
+    var isValid = element['isValid'];
+    var hash = element['interactionHash'];
+    console.log(`Hash is ${hash}`)
+    // var input  = '32343630';
+    var hashAscii = web3.utils.toAscii(hash);
+    // var hashAscii = web3.utils.hexToAscii(hash);
+    console.log(`Hash Ascii is ${hashAscii}`);
+    var hashImage = await hashToFile(hashAscii);
+    output.push({id : index, hash : hash, dateTime : dateTime, imageUrl : hashImage, isValid : isValid})    
+  });
+  // for (i in hashArray) {
+  //     var interactionObject = hashArray[i];
+  //     var dateTime = interactionObject['dateTime'];
+  //     var hashHex = interactionObject['interactionHash'].toString();
+  //     var hash = web3.utils.hexToUtf8(hashHex);
+  //     // hash.then(res => console.log(res))
+  //     // console.log(`Hash is ${hash}`)
+  //     var isValid = interactionObject['isValid']
+  //     var hashImage = await hashToFile(hash);
+  //     output.push({
+  //       id : i,
+  //       hash : hash,
+  //       dateTime : dateTime,
+  //       imageUrl : hashImage,
+  //       isValid :  isValid
+  //     })
+  // }
   return output;
 }
 
@@ -93,9 +108,10 @@ router.post('/register/institution', cors(), async function(req, res, next) {
 router.get('/profile', cors(), async function(req, res, next) {
   var address = req.query.address;
   await ecosystemInstance.methods.getInteraction(address).call({from : address,  gas: 1000000})
-  .then((result) => {
+  .then(async(result) => {
     if (result) {
-      handleHashes(result).then((output) => res.send({'success' : true, 'message' : output}))
+      // console.log(result)
+      await handleHashes(result).then((output) => res.send({'success' : true, 'message' : output}))
     } else {
       res.send({'success' : false, 'message' : `No Interactions found for user ${address}`})
     }
@@ -109,14 +125,12 @@ router.get('/profile', cors(), async function(req, res, next) {
 // Posting of hash, only available for institutions
 router.post('/hash', cors(), async function(req, res, next) {
   var file = req.body.file;
-  var hash = web3.utils.asciiToHex(await fileToHash(file));
+  var hash = await fileToHash(file);
   var recipient = req.body.recipient;
   var institution = req.body.institution;
   var dateTime = Date.now()
-  await ecosystemInstance.methods.addInteraction(hash, dateTime, recipient).send({from : institution,  gas: 1000000})
+  await ecosystemInstance.methods.addInteraction(web3.utils.asciiToHex(hash), dateTime, recipient).send({from : institution,  gas: 1000000})
   .then((result) => {
-    console.log(result)
-    // confirm what results is
     res.send({'success' : true, 'message' : `${hash} has been successfully uploaded for recipient ${recipient}`})
   })
   .catch((err) => {

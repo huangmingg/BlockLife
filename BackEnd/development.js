@@ -27,8 +27,8 @@ let hardMap = {}
 async function mapAddresses(accounts) {
     hardMap = {
         '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[0],
-        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[1],
-        '0x0000000000000000000000000000000000000003' : accounts[2],
+        '0x0000000000000000000000000000000000000002' : accounts[1],
+        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[2],
         '0x0000000000000000000000000000000000000004' : accounts[3],
         '0x0000000000000000000000000000000000000005' : accounts[4],
         '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[5],
