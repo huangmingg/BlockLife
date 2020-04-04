@@ -2,9 +2,6 @@ const IPFS = require('ipfs');
 const { globSource } = IPFS;
 let IPFSnode;
 
-//IPFS structure
-//root/<Ethereum address>/<cert>
-
 async function send(address) {
 
     for await (const file of IPFSnode.add(globSource(address))) {
