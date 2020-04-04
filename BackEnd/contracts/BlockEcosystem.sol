@@ -131,6 +131,6 @@ contract BlockEcosystem {
 
     function checkUserIdentity(address userAddress) public view returns (Identity) {
         return userIdentity[userAddress];
-    }
+    }   
 
 }

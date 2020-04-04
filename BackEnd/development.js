@@ -1,8 +1,11 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 var _ = require('underscore');
-const IPFS = require('./IPFS');
+const IPFSTools = require('./IPFS.js');
 
+var fs = require('fs');
+
+var imageAsBase64 = fs.readFileSync('./images/test.jpg', 'base64');
 // Contract deployment -- Only used during development 
 
 // DEFAULT 
@@ -91,7 +94,9 @@ async function fillData() {
             numberInteractions = 1 + generateRandom(5);
             for (var j = 0; j < numberInteractions; j++) {
                 var timestamp = Date.now()
-                var randomHash = web3.utils.keccak256(web3.utils.randomHex(36));
+                // console.log(imageAsBase64);
+                var randomHash = web3.utils.asciiToHex(await IPFSTools.send(imageAsBase64).toString())
+                // var randomHash = web3.utils.asciiToHex(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 20));
                 var feedBack = web3.utils.asciiToHex(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 20));
                 console.log(`Adding Interaction ${randomHash} from ${institutions[i]['institutionName']} to ${users[k]['userName']}`)
                 await ecosystemInstance.methods.addInteraction(randomHash, timestamp, users[k]['ethAddress']).send({from : institutions[i]['ethAddress'], gas : 1000000});

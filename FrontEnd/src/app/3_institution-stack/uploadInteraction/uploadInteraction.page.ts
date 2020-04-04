@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { InteractionService } from '../../7_services/interaction/interaction.service';
 import { ValidationService } from '../../7_services/validation/validation.service';
-
+import { ConversionService } from '../../7_services/conversion/conversion.service';
 
 @Component({
   selector: 'app-uploadInteraction',
@@ -12,31 +12,52 @@ import { ValidationService } from '../../7_services/validation/validation.servic
 
 
 export class UploadInteractionPage {
-  image: string
-  recepientAddress: string
-  // search page should contain search organization component
-  constructor(private route: Router, private interactionService: InteractionService, private validationService: ValidationService) { }
+  image
+  recipientAddress: string
+  constructor(
+    private route: Router, 
+    private interactionService: InteractionService, 
+    private validationService: ValidationService,
+    private conversionService: ConversionService 
+  ) { }
 
   ngOnInit() {
 
-}
+  }
 
   async validateAddress(address) {
     // currently does not check if the user has had an interaction with the institution before.
     // would this be a contract-based check?
-    this.recepientAddress = address
-    var bool = this.validationService.validateAddress(address);
-    var message = bool ? "Validated" : "Invalidated"
-    console.log(message);
+    this.recipientAddress = address;
+    var boolean = this.validationService.validateAddress(address); 
+    return boolean;
   }
 
-  async validateImage(image) {
-    this.image = image;
+
+  async handleClick() {
+    var result = await this.validateAddress(this.recipientAddress);
+    if (!result) {
+      console.log("Input Address for recipient is not valid")
+      alert("Input Address for recipient is not valid!")
+    } else if (!this.image) {
+      console.log("Please upload the interaction file!")
+      alert("Please upload the interaction file!")
+    } else {
+      await this.uploadInteraction();
+      // location.reload();
+    }
+    
+  }
+
+  async handleImage($event) {
+    var file = $event.target.files[0];
+    var imageString = await this.conversionService.convertBase64(file).toString();
+    this.image = imageString;
   }
 
   async uploadInteraction() {
     var institutionAddress = "0xEa27b334967Fa7864748c39918EA6234Cd420747" // registered individual
-    this.interactionService.addInteraction(this.image, this.recepientAddress, institutionAddress);
+    await this.interactionService.addInteraction(this.image, this.recipientAddress, institutionAddress);
   }
   
 

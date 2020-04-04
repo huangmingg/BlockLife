@@ -55,7 +55,9 @@ app.use(function(err, req, res, next) {
 
 // import startNetwork from ;
 var devTools = require('./development.js');
+var IPFSTools = require('./IPFS.js');
 
+IPFSTools.createIPFS().then((res) => global.IPFS = res);
 devTools.startNetwork();
 
 module.exports = app;

@@ -3,6 +3,8 @@ var router = express.Router();
 var cors = require('cors')
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
+var IPFSTools = require('../IPFS.js');
+
 
 function generateRandom(b) {
   return Math.floor((Math.random() * b));
@@ -16,7 +18,8 @@ const randomImageURL = ["https://cdn.mos.cms.futurecdn.net/6h8C6ygTdR2jyyUxkALws
 // Will interact with IFPS, uploads the file and return the hashed endpoint.
 async function fileToHash(file) {
   // for now return the hash of file (will use await here)
-  var hash = web3.utils.keccak256(file);
+  var hash = await IPFSTools.send(file).toString()
+  // var hash = web3.utils.keccak256(file);
   return hash;
 }
 
@@ -106,10 +109,11 @@ router.get('/profile', cors(), async function(req, res, next) {
 // Posting of hash, only available for institutions
 router.post('/hash', cors(), async function(req, res, next) {
   var file = req.body.file;
-  var hash = await fileToHash(file);
+  var hash = web3.utils.asciiToHex(await fileToHash(file));
   var recipient = req.body.recipient;
   var institution = req.body.institution;
-  await ecosystemInstance.methods.addInteraction(hash, recipient).send({from : institution,  gas: 1000000})
+  var dateTime = Date.now()
+  await ecosystemInstance.methods.addInteraction(hash, dateTime, recipient).send({from : institution,  gas: 1000000})
   .then((result) => {
     console.log(result)
     // confirm what results is
@@ -127,7 +131,8 @@ router.post('/feedback', cors(), async function(req, res, next) {
   var feedback = web3.utils.asciiToHex(req.body.feedback);
   var institution = req.body.institution;
   var user = req.body.user;
-  await ecosystemInstance.methods.addFeedback(feedback,institution).send({from : user, gas : 1000000})
+  var dateTime = Date.now()
+  await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
     console.log(result)
     // confirm what results is
