@@ -5,7 +5,16 @@ const IPFSTools = require('./IPFS.js');
 
 var fs = require('fs');
 
-var imageAsBase64 = fs.readFileSync('./images/test.jpg', 'base64');
+var imageAsBase64 = fs.readFileSync('./images/test.jpg').toString('base64');
+imageAsBase64 = `data:image/jpg;base64,${imageAsBase64}`;
+// , (err, data) => {
+//     let base64Image = new Buffer(data, 'binary').toString('base64');
+//     //combine all strings
+//     let imgSrcString = `data:image/jpg;base64,${base64Image}`;
+//     return imgSrcString;
+// })
+
+console.log(imageAsBase64);
 // Contract deployment -- Only used during development 
 
 // DEFAULT 
@@ -27,8 +36,8 @@ let hardMap = {}
 async function mapAddresses(accounts) {
     hardMap = {
         '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[0],
-        '0x0000000000000000000000000000000000000002' : accounts[1],
-        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[2],
+        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[1],
+        '0x0000000000000000000000000000000000000003' : accounts[2],
         '0x0000000000000000000000000000000000000004' : accounts[3],
         '0x0000000000000000000000000000000000000005' : accounts[4],
         '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[5],
@@ -95,7 +104,10 @@ async function fillData() {
             for (var j = 0; j < numberInteractions; j++) {
                 var timestamp = Date.now()
                 // console.log(imageAsBase64);
-                var randomHash = web3.utils.asciiToHex(await IPFSTools.send(imageAsBase64).toString())
+                var IPFSHash = await IPFSTools.send(imageAsBase64)
+                console.log(`IPFS Hash is ${IPFSHash}`);
+                var randomHash = web3.utils.asciiToHex(IPFSHash)
+                console.log(`Hash is ${randomHash}`)
                 // var randomHash = web3.utils.asciiToHex(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 20));
                 var feedBack = web3.utils.asciiToHex(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 20));
                 console.log(`Adding Interaction ${randomHash} from ${institutions[i]['institutionName']} to ${users[k]['userName']}`)
@@ -103,9 +115,9 @@ async function fillData() {
                 console.log(`Adding Feedback ${feedBack} from ${users[k]['userName']} to ${institutions[i]['institutionName']}`)
                 await ecosystemInstance.methods.addFeedback(feedBack, timestamp, institutions[i]['ethAddress']).send({from : users[k]['ethAddress'], gas : 1000000})
             }
-            break;
+            // break;
         }
-        break;
+        // break;
     }
 }
 

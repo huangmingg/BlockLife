@@ -12,8 +12,9 @@ import { ConversionService } from '../../7_services/conversion/conversion.servic
 
 
 export class UploadInteractionPage {
-  image
+  image : string
   recipientAddress: string
+  
   constructor(
     private route: Router, 
     private interactionService: InteractionService, 
@@ -50,13 +51,14 @@ export class UploadInteractionPage {
   }
 
   async handleImage($event) {
+    console.log("Handling image")
     var file = $event.target.files[0];
-    var imageString = await this.conversionService.convertBase64(file).toString();
-    this.image = imageString;
+    var imageString = await this.conversionService.convertBase64(file);
+    this.image = imageString.toString();
   }
 
   async uploadInteraction() {
-    var institutionAddress = "0xEa27b334967Fa7864748c39918EA6234Cd420747" // registered individual
+    var institutionAddress = "0xEa27b334967Fa7864748c39918EA6234Cd420747"
     await this.interactionService.addInteraction(this.image, this.recipientAddress, institutionAddress);
   }
   

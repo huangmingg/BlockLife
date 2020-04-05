@@ -25,9 +25,8 @@ export class FeedbackService {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        for (var i in res.message) {
-          this.feedbacks.push({id: i, text : res.message[i].description, date: "hehe"})
-        }
+        console.log(res)
+        this.feedbacks = res.message
       })
   }
 
