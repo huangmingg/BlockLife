@@ -39,7 +39,7 @@ async function handleFeedback(feedbackArray) {
   output = []
   feedbackArray.forEach(async(element, index) => {
     var id = element['id']
-    var text = element['text']
+    var text = web3.utils.toAscii(element['text'])
     var dateTime = element['dateTime']
     var owner = element['owner']
     var isValid = element['isValid']
