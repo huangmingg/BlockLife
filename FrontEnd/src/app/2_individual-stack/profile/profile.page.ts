@@ -25,5 +25,7 @@ export class ProfilePage {
 
   async remove(item) {
     console.log(item);
+    console.log(item.hash);
+    this.interactionService.deleteInteraction(item.hash, "0x2192e76c85648edcdef826c07c9464788747c326");
   }
 }

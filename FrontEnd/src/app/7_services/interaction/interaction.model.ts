@@ -4,4 +4,5 @@ export interface Interaction {
     image: string;
     dateTime: number;
     isValid: boolean;
+    issuer: string;
 }
