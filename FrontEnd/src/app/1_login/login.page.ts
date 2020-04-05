@@ -39,8 +39,6 @@ export class LoginPage implements OnInit {
 
   async metaMaskInjection() {
     // console.log(this.web3.currentProvider);
-    // readonly currentProvider: provider;
-
     var provider = this.web3.currentProvider;
     if ('enable' in provider) {
       try {

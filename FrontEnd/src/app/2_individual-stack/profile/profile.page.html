@@ -27,8 +27,8 @@
       <ion-item>
         <ion-label> {{ interaction.id }}</ion-label>
         <ion-title>{{ interaction.hash }}</ion-title> 
-        <ion-img style="width: 100px; height: 100px;"  [src]="interaction.imageUrl"></ion-img>
-        <ion-button (click)="remove(item)">remove</ion-button>
+        <ion-img style="width: 100px; height: 100px;"  [src]="interaction.image"></ion-img>
+        <ion-button (click)="remove(interaction)">remove</ion-button>
       </ion-item>
 
   </ion-list>

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Interaction } from './interaction.model';
+import { HttpClient } from '@angular/common/http';
+// const request = require('request');
 
 const IP_ADDRESS = "http://localhost:3000";
 
@@ -10,7 +12,7 @@ const IP_ADDRESS = "http://localhost:3000";
 export class InteractionService {
   private interactions : Interaction[] = [];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   async retrieveAllInteractions(address : string) {
     await this.fetchInteractions(address);
@@ -34,9 +36,9 @@ export class InteractionService {
       .then((response : Response) => response.json())
       .then((res) => {
         if (res.success) {
-          this.interactions = res.message
+            console.log(res)
+            this.interactions = res.message
         }
-        console.log(res)
       })
   }
 
@@ -46,7 +48,7 @@ export class InteractionService {
       method: 'POST',
           headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
           },
           body: JSON.stringify({
               file: file,
