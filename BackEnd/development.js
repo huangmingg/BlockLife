@@ -7,14 +7,7 @@ var fs = require('fs');
 
 var imageAsBase64 = fs.readFileSync('./images/test.jpg').toString('base64');
 imageAsBase64 = `data:image/jpg;base64,${imageAsBase64}`;
-// , (err, data) => {
-//     let base64Image = new Buffer(data, 'binary').toString('base64');
-//     //combine all strings
-//     let imgSrcString = `data:image/jpg;base64,${base64Image}`;
-//     return imgSrcString;
-// })
 
-console.log(imageAsBase64);
 // Contract deployment -- Only used during development 
 
 // DEFAULT 
