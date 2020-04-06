@@ -66,4 +66,26 @@ export class InteractionService {
 
   }
 
+  async deleteInteraction(hash: string, user: string) {
+    await fetch(IP_ADDRESS + '/truffle/hashDelete', {
+      method: 'DELETE',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              hash: hash,
+              user: user
+            }) 
+        })
+      .catch((error) => {console.log(error)})
+      .then((response : Response) => response.json())
+      .then((res) => {
+        console.log(res);
+        // this.interactions = res.message
+      })
+  
+
+  }
+
 }

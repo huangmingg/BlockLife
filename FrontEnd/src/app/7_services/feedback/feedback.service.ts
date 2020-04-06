@@ -50,8 +50,29 @@ export class FeedbackService {
         console.log(res);
         // this.interactions = res.message
       })
+  }
   
-
+  async deleteFeedback(feedbackID: string, user: string, institution: string) {
+    console.log(institution);
+    console.log('test')
+    await fetch(IP_ADDRESS + '/truffle/feedbackDelete', {
+      method: 'DELETE',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              feedbackID: feedbackID,
+              institution: institution,
+              user : user
+            }) 
+        })
+      .catch((error) => {console.log(error)})
+      .then((response : Response) => response.json())
+      .then((res) => {
+        console.log(res);
+        // this.interactions = res.message
+      })
   }
 
 

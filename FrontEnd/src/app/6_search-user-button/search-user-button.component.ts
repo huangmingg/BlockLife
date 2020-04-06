@@ -29,9 +29,10 @@ export class SearchUserButtonComponent implements OnInit {
     this.interactions = await this.interactionService.retrieveAllInteractions(this.userAddress);
   }
 
-
-  
-
-
+  async remove(item) {
+    console.log(item);
+    console.log(item.hash);
+    this.interactionService.deleteInteraction(item.hash, "0x2192e76c85648edcdef826c07c9464788747c326");
+  }
 
 }

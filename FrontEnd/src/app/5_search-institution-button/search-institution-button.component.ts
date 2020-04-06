@@ -36,4 +36,13 @@ export class SearchInstitutionButtonComponent implements OnInit {
     this.feedbacks = await this.feedbackService.retrieveAllFeedback(address);
   }
 
+  async remove(item) {
+    console.log(item);
+    console.log(item.owner);
+    var user = "0x2192e76c85648edcdef826c07c9464788747c326";
+    console.log(this.institutionAddress);
+    this.feedbackService.deleteFeedback(item.id, user, "0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c");
+    //this.interactionService.deleteInteraction(item.hash, "0x2192e76c85648edcdef826c07c9464788747c326");
+  }
+
 }

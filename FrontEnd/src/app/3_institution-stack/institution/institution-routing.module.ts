@@ -48,6 +48,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'approve_institution',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../approveInstitution/approveInstitution.module').then(m => m.ApproveInstitutionPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/institution/home',
         pathMatch: 'full'
