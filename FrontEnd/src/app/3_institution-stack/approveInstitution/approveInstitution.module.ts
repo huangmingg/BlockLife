@@ -5,8 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApproveInstitutionPage } from './approveInstitution.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
-import { SearchUserButtonComponentModule } from '../../6_search-user-button/search-user-button.module'
-
+import { ApproveInstitutionButtonComponentModule } from '../../8_approve-institution-button/approve-institution-button.module'
 
 @NgModule({
   imports: [
@@ -14,7 +13,7 @@ import { SearchUserButtonComponentModule } from '../../6_search-user-button/sear
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    SearchUserButtonComponentModule,
+    ApproveInstitutionButtonComponentModule,
     RouterModule.forChild([{ path: '', component: ApproveInstitutionPage }])
   ],
   declarations: [ApproveInstitutionPage]
