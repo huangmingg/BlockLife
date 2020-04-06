@@ -30,7 +30,8 @@ async function handleHashes(hashArray) {
     var hash = element['interactionHash'];
     var hashAscii = web3.utils.toAscii(hash);
     var image = imageArray[index]
-    output.push({id : index, hash : hashAscii, image, dateTime, isValid})  
+    var issuer = element['issuer']
+    output.push({id : index, hash : hashAscii, image, dateTime, isValid, issuer})  
   })
   return output;
 }
@@ -39,7 +40,7 @@ async function handleFeedback(feedbackArray) {
   output = []
   feedbackArray.forEach(async(element, index) => {
     var id = element['id']
-    var text = element['text']
+    var text = web3.utils.hexToAscii(element['text'])
     var dateTime = element['dateTime']
     var owner = element['owner']
     var isValid = element['isValid']
@@ -129,6 +130,21 @@ router.post('/hash', cors(), async function(req, res, next) {
   })
 });
 
+// Deleting of hash, only available for institutions who issued the interaction, or individuals who owned the interaction
+router.delete('/hashDelete', cors(), async function(req, res, next) {
+  var hash = req.body.hash;
+  hash = web3.utils.asciiToHex(hash)
+  var user = req.body.user;
+  await ecosystemInstance.methods.invalidateInteraction(hash, user).send({from : user,  gas: 1000000})
+  .then((result) => {
+    console.log(result)
+    res.send({'success' : true, 'message' : `${hash} has been deleted for user ${user}`})
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+});
+
 
 // Posting of feedback, available to public for now
 // Should only be available to people who have worked in the company before
@@ -150,9 +166,28 @@ router.post('/feedback', cors(), async function(req, res, next) {
 
 // Retrieving of feedback, available to public
 router.get('/feedback', cors(), async function(req, res, next) {
-  var address = req.query.address
+  var address = req.query.address;
   console.log(address);
   await ecosystemInstance.methods.getFeedback(address).call({from : address,  gas: 1000000})
+  .then(async (result) => {
+    if (!result.length) {
+      res.send({'success' : false, 'message' : "Invalid address"})
+    } else {
+      var output = await handleFeedback(result)
+      res.send({'success' : true, 'message' : output})  
+    }
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+});
+
+// Deleting of feedback, available to public
+router.delete('/feedbackDelete', cors(), async function(req, res, next) {
+  var feedbackID = req.body.feedbackID;
+  var institution = req.body.institution;
+  var user = req.body.user;
+  await ecosystemInstance.methods.invalidateFeedback(web3.utils.toBN(feedbackID), institution).call({from : user,  gas: 1000000})
   .then(async (result) => {
     if (!result.length) {
       res.send({'success' : false, 'message' : "Invalid address"})
