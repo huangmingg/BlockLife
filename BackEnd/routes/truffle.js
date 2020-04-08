@@ -5,11 +5,13 @@ var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 var IPFSTools = require('../IPFS.js');
 
+// Put file onto IPFS network
 async function fileToHash(file) {
   var hash = await IPFSTools.send(file);
   return hash;
 }
 
+// Retrieves file from IPFS network
 async function hashToFile(hash) {
   var image = await IPFSTools.retrieve(hash).then((res) => {
     return res
@@ -17,6 +19,7 @@ async function hashToFile(hash) {
   return image;
 }
 
+// Transform data into the required format to send frontend
 async function handleHashes(hashArray) {
   output = []
   var hashAsciiArray = hashArray.map(function(item) { return web3.utils.toAscii(item["interactionHash"]);})
@@ -36,6 +39,7 @@ async function handleHashes(hashArray) {
   return output;
 }
 
+// Transform data into the required format to send frontend
 async function handleFeedback(feedbackArray) {
   output = []
   feedbackArray.forEach(async(element, index) => {
@@ -49,7 +53,7 @@ async function handleFeedback(feedbackArray) {
   return output;
 }
 
-
+// Retrieves the identity of user (unregistered, individual, institution, contract owner)
 router.get('/identity', cors(), async function(req,res,next) {
   var address = req.query.address.toString().toLowerCase();
   var mappedAddress = global.hardMap[address];
@@ -64,13 +68,13 @@ router.get('/identity', cors(), async function(req,res,next) {
 
 
 
-// registering of user
+// Register address as individual
 router.post('/register/user', cors(), async function(req, res, next) {
   var address = req.body.address;
+  address = global.hardMap[address];
   if (!web3.isAddress(address)) return;
   await ecosystemInstance.methods.registerIndividual().send({from : address, gas : 1000000})
   .then((result) => {
-    // console.log(result)
     res.send({'success' : true, 'message' : `User ${address} has been successfully registered`})
   })
   .catch((err) => {
@@ -78,14 +82,16 @@ router.post('/register/user', cors(), async function(req, res, next) {
   })
 });
 
-// registering of institution
+// Register address as institution
 router.post('/register/institution', cors(), async function(req, res, next) {
   var institution = req.body.institution;
   var user = req.body.user;
+  institution = global.hardMap[institution];
+  user = global.hardMap[user];
+
   if (!web3.isAddress(institution) || !web3.isAddress(user)) return;
   await ecosystemInstance.methods.registerInstitution(institution).send({from : user, gas : 1000000})
   .then((result) => {
-    console.log(result)
     res.send({'success' : true, 'message' : `Institution ${address} has been successfully registered`})
   })
   .catch((err) => {
@@ -93,11 +99,10 @@ router.post('/register/institution', cors(), async function(req, res, next) {
   })
 });
 
-// Retrieving of hash, available to public
+// Retrieving of hashes for a individual
 router.get('/profile', cors(), async function(req, res, next) {
   var address = req.query.address;
   address = global.hardMap[address];
-  console.log(`Address is ${address}`)
   await ecosystemInstance.methods.getInteraction(address).call({from : address,  gas: 1000000})
   .then(async(result) => {
     if (result) {
@@ -112,8 +117,25 @@ router.get('/profile', cors(), async function(req, res, next) {
   })
 });
 
+// Retrieving of hashes uploaded by a particular institution
+router.get('/hash', cors(), async function(req, res, next) {
+  var address = req.query.address;
+  address = global.hardMap[address];
+  await ecosystemInstance.methods.getUploadedInteraction().call({from : address, gas : 1000000})
+  .then(async(result) => {
+    if (result) {
+      var output = await handleHashes(result)
+      res.send({'success' : true, 'message' : output})
+    } else {
+      res.send({'success' : false, 'message' : `No Interactions found for user ${address}`})
+    }
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+})
 
-// Posting of hash, only available for institutions
+// Uploading of hash (only available for institutions)
 router.post('/hash', cors(), async function(req, res, next) {
   var file = req.body.file;
   var hash = await fileToHash(file);
@@ -136,12 +158,11 @@ router.post('/hash', cors(), async function(req, res, next) {
   })
 });
 
-// Deleting of hash, only available for institutions who issued the interaction, or individuals who owned the interaction
+// Invalidation of hash, only available for institutions who issued the interaction, or individuals who owned the interaction
 router.post('/invalidate/hash', cors(), async function(req, res, next) {
   var hash = req.body.hash;
   hash = web3.utils.asciiToHex(hash)
   var user = req.body.user;
-  // hard map to ganache accounts
   user = global.hardMap[user];
   await ecosystemInstance.methods.invalidateInteraction(hash, user).send({from : user,  gas: 1000000})
   .then((result) => {
@@ -156,7 +177,6 @@ router.post('/invalidate/hash', cors(), async function(req, res, next) {
   })
 });
 
-
 // Posting of feedback, available to public for now
 // Should only be available to people who have worked in the company before
 router.post('/feedback', cors(), async function(req, res, next) {
@@ -164,15 +184,11 @@ router.post('/feedback', cors(), async function(req, res, next) {
   var institution = req.body.institution;
   var user = req.body.user;
   var dateTime = Date.now()
-  console.log(`Institution is ${institution}`)
-  console.log(`User is ${user}`)
 
-  // hard map to ganache accounts
   user = global.hardMap[user];
   institution = global.hardMap[institution];
   console.log(`Institution is ${institution}`)
   console.log(`User is ${user}`)
-
   await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
     console.log(result)
@@ -184,7 +200,7 @@ router.post('/feedback', cors(), async function(req, res, next) {
   })
 });
 
-// Retrieving of feedback, available to public
+// Retrieving of feedback of an institution
 router.get('/feedback', cors(), async function(req, res, next) {
   var address = req.query.address;
   address = global.hardMap[address];
@@ -202,14 +218,29 @@ router.get('/feedback', cors(), async function(req, res, next) {
   })
 });
 
+// Retrieving of feedback added by individual
+router.get('/feedback/individual', cors(), async function(req, res, next) {
+  var address = req.query.address;
+  address = global.hardMap[address];
+  await ecosystemInstance.methods.getAddedFeedback().call({from : address,  gas: 1000000})
+  .then(async (result) => {
+    if (!result.length) {
+      res.send({'success' : false, 'message' : "Invalid address"})
+    } else {
+      var output = await handleFeedback(result)
+      res.send({'success' : true, 'message' : output})  
+    }
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+});
 
-
-// Deleting of feedback, available to owner
+// Invalidation of feedback, available to feedback owners
 router.post('/feedback/invalidate', cors(), async function(req, res, next) {
   var feedbackID = req.body.feedbackID;
   var institution = req.body.institution;
   var user = req.body.user;
-  // hard map to ganache accounts
   institution = global.hardMap[institution];
   user = global.hardMap[user];
   await ecosystemInstance.methods.invalidateFeedback(web3.utils.toBN(feedbackID), institution).call({from : user,  gas: 1000000})
@@ -220,8 +251,6 @@ router.post('/feedback/invalidate', cors(), async function(req, res, next) {
     res.send({'success' : false, 'message' : err})
   })
 });
-
-
 
 module.exports = router;
 

@@ -25,6 +25,8 @@ contract BlockEcosystem {
         bool isValid;
     }
 
+    uint256 numberFeedback;
+
     constructor() public {
         contractOwner = msg.sender;
         userIdentity[msg.sender] = Identity.owner;
@@ -40,7 +42,12 @@ contract BlockEcosystem {
     // maps to address to feedback id to index
     mapping(address => mapping(uint => uint)) private _indexOfFeedbackList;    
     
-    // mapping(address => mapping(address => uint)) previousInteraction;
+    mapping(address => Interaction[]) uploadedInteraction;
+    mapping(address => mapping(bytes => uint)) private _indexOfUploadedInteraction;
+
+    mapping(address => Feedback[]) addedFeedback;
+    mapping(address => mapping(uint => uint)) private _indexOfAddedFeedback;
+
 
     event AddedInteraction(address);
     event AddedFeedBack(address);
@@ -78,6 +85,11 @@ contract BlockEcosystem {
         _;
     }
 
+    modifier isRegisteredUser() {
+        require(userIdentity[msg.sender] == Identity.individual, "Only registered uesrs have access to this function!");
+        _;
+    }
+
     modifier isUnregisteredUser() {
         require(userIdentity[msg.sender] == Identity.undefined, "Only unregistered uesrs have access to this function!");
         _;
@@ -99,6 +111,12 @@ contract BlockEcosystem {
     function addInteraction(bytes memory interactionHash, uint timestamp, address recipient) public isRegisteredInstitution(msg.sender) {
         Interaction memory newInteraction = Interaction(interactionHash, timestamp, msg.sender, true);
         individualProfile[recipient].push(newInteraction);
+        uint256 individualIndex = individualProfile[recipient].length;
+        _indexOfInteractionList[recipient][interactionHash] = individualIndex - 1;
+        
+        uploadedInteraction[msg.sender].push(newInteraction);
+        uint256 institutionIndex = uploadedInteraction[msg.sender].length;
+        _indexOfUploadedInteraction[msg.sender][interactionHash] = institutionIndex - 1;
         emit AddedInteraction(recipient);
     }
 
@@ -108,10 +126,17 @@ contract BlockEcosystem {
         emit InvalidateInteraction(interactionHash);
     }
 
-    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public {
-        uint newId = organizationFeedback[institution].length;
+    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredUser() {
+        uint newId = numberFeedback;
+        numberFeedback = numberFeedback + 1; 
         Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, true);
         organizationFeedback[institution].push(newFeedback);
+        uint256 institutionIndex = organizationFeedback[institution].length;
+        _indexOfFeedbackList[institution][newId] = institutionIndex - 1;
+
+        addedFeedback[msg.sender].push(newFeedback);
+        uint256 individualIndex = addedFeedback[msg.sender].length;
+        _indexOfAddedFeedback[msg.sender][newId] = individualIndex - 1;
         emit AddedFeedBack(institution);
     }
 
@@ -119,6 +144,17 @@ contract BlockEcosystem {
         uint feedbackIndex = _indexOfFeedbackList[institution][feedbackID];
         organizationFeedback[institution][feedbackIndex].isValid = false;
         emit InvalidateFeedback(feedbackID, institution);
+    }
+
+
+    // For institutions to retrieve all the interactions they uploaded.
+    function getUploadedInteraction() public view isRegisteredInstitution(msg.sender) returns (Interaction[] memory) {
+        return uploadedInteraction[msg.sender];
+    }
+
+    // For uesrs to retrieve all the feedback they added.
+    function getAddedFeedback() public view isRegisteredUser() returns (Feedback[] memory) {
+        return addedFeedback[msg.sender];
     }
 
     function getInteraction(address individual) public view returns (Interaction[] memory) {
