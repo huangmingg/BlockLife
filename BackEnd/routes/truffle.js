@@ -96,6 +96,8 @@ router.post('/register/institution', cors(), async function(req, res, next) {
 // Retrieving of hash, available to public
 router.get('/profile', cors(), async function(req, res, next) {
   var address = req.query.address;
+  address = global.hardMap[address];
+  console.log(`Address is ${address}`)
   await ecosystemInstance.methods.getInteraction(address).call({from : address,  gas: 1000000})
   .then(async(result) => {
     if (result) {
@@ -114,11 +116,15 @@ router.get('/profile', cors(), async function(req, res, next) {
 // Posting of hash, only available for institutions
 router.post('/hash', cors(), async function(req, res, next) {
   var file = req.body.file;
-  // var hash = web3.utils.keccak256(file)
   var hash = await fileToHash(file);
   var hexedHash = web3.utils.asciiToHex(hash)
   var recipient = req.body.recipient;
+  recipient = global.hardMap[recipient];
+  console.log(`Recipient is ${recipient}`);
+  
   var institution = req.body.institution;
+  institution = global.hardMap[institution];
+  console.log(`Institution is ${institution}`);
   var dateTime = Date.now()
   await ecosystemInstance.methods.addInteraction(hexedHash, dateTime, recipient).send({from : institution,  gas: 1000000})
   .then((result) => {
@@ -131,14 +137,19 @@ router.post('/hash', cors(), async function(req, res, next) {
 });
 
 // Deleting of hash, only available for institutions who issued the interaction, or individuals who owned the interaction
-router.delete('/hashDelete', cors(), async function(req, res, next) {
+router.post('/invalidate/hash', cors(), async function(req, res, next) {
   var hash = req.body.hash;
   hash = web3.utils.asciiToHex(hash)
   var user = req.body.user;
+  // hard map to ganache accounts
+  user = global.hardMap[user];
   await ecosystemInstance.methods.invalidateInteraction(hash, user).send({from : user,  gas: 1000000})
   .then((result) => {
-    console.log(result)
-    res.send({'success' : true, 'message' : `${hash} has been deleted for user ${user}`})
+    if (result.status) {
+      res.send({'success' : true, 'message' : `${hash} has been deleted for user ${user}`})
+    } else {
+      res.send({'success' : false, 'message' : `Something went wrong please try again`})
+    }
   })
   .catch((err) => {
     res.send({'success' : false, 'message' : err})
@@ -151,7 +162,9 @@ router.delete('/hashDelete', cors(), async function(req, res, next) {
 router.post('/feedback', cors(), async function(req, res, next) {
   var feedback = web3.utils.asciiToHex(req.body.feedback);
   var institution = req.body.institution;
+  institution = global.hardMap[institution];
   var user = req.body.user;
+  user = global.hardMap[user];
   var dateTime = Date.now()
   await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
@@ -167,7 +180,7 @@ router.post('/feedback', cors(), async function(req, res, next) {
 // Retrieving of feedback, available to public
 router.get('/feedback', cors(), async function(req, res, next) {
   var address = req.query.address;
-  console.log(address);
+  address = global.hardMap[address];
   await ecosystemInstance.methods.getFeedback(address).call({from : address,  gas: 1000000})
   .then(async (result) => {
     if (!result.length) {
@@ -182,24 +195,25 @@ router.get('/feedback', cors(), async function(req, res, next) {
   })
 });
 
-// Deleting of feedback, available to public
-router.delete('/feedbackDelete', cors(), async function(req, res, next) {
+
+
+// Deleting of feedback, available to owner
+router.post('/feedback/invalidate', cors(), async function(req, res, next) {
   var feedbackID = req.body.feedbackID;
   var institution = req.body.institution;
   var user = req.body.user;
+  // hard map to ganache accounts
+  institution = global.hardMap[institution];
+  user = global.hardMap[user];
   await ecosystemInstance.methods.invalidateFeedback(web3.utils.toBN(feedbackID), institution).call({from : user,  gas: 1000000})
   .then(async (result) => {
-    if (!result.length) {
-      res.send({'success' : false, 'message' : "Invalid address"})
-    } else {
-      var output = await handleFeedback(result)
-      res.send({'success' : true, 'message' : output})  
-    }
+    console.log(result)
   })
   .catch((err) => {
     res.send({'success' : false, 'message' : err})
   })
 });
+
 
 
 module.exports = router;

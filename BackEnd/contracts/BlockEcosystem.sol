@@ -104,7 +104,7 @@ contract BlockEcosystem {
 
     function invalidateInteraction(bytes memory interactionHash, address recipient) public eitherRecipientOrIssuer(interactionHash, recipient) {
         uint interactionIndex = _indexOfInteractionList[recipient][interactionHash];
-        individualProfile[recipient][interactionIndex].isValid == false;
+        individualProfile[recipient][interactionIndex].isValid = false;
         emit InvalidateInteraction(interactionHash);
     }
 
@@ -117,7 +117,7 @@ contract BlockEcosystem {
 
     function invalidateFeedback(uint feedbackID, address institution) public isFeedbackOwner(feedbackID, institution){
         uint feedbackIndex = _indexOfFeedbackList[institution][feedbackID];
-        organizationFeedback[institution][feedbackIndex].isValid == false;
+        organizationFeedback[institution][feedbackIndex].isValid = false;
         emit InvalidateFeedback(feedbackID, institution);
     }
 

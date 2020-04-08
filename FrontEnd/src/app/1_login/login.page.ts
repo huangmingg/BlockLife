@@ -33,12 +33,11 @@ export class LoginPage implements OnInit {
     var message = challenge[1]['value']
     var result = await this.sendChallenge(message, signature);
     if (!result) {alert("Authentication failed, please try again!");return;} 
-    var identity = await this.identificationService.getIdentity(address);
+    var identity = await this.identificationService.fetchIdentity(address);
     this.handleIdentity(identity);
   }
 
   async metaMaskInjection() {
-    // console.log(this.web3.currentProvider);
     var provider = this.web3.currentProvider;
     if ('enable' in provider) {
       try {

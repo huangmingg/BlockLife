@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Feedback } from './feedback.model';
-const IP_ADDRESS = "http://localhost:3000";
+import Config from '../../env.js'
+
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class FeedbackService {
   }
 
   async fetchFeedback(address : string) {
-    await fetch(IP_ADDRESS + '/truffle/feedback?address=' + (address), {
+    await fetch(Config.IP_ADDRESS + '/truffle/feedback?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -32,7 +33,7 @@ export class FeedbackService {
 
 
   async addFeedback(feedback: string, user: string, institution: string) {
-    await fetch(IP_ADDRESS + '/truffle/feedback', {
+    await fetch(Config.IP_ADDRESS + '/truffle/feedback', {
       method: 'POST',
           headers: {
               'Accept': 'application/json',
@@ -48,14 +49,13 @@ export class FeedbackService {
       .then((response : Response) => response.json())
       .then((res) => {
         console.log(res);
-        // this.interactions = res.message
       })
   }
   
   async deleteFeedback(feedbackID: string, user: string, institution: string) {
     console.log(institution);
     console.log('test')
-    await fetch(IP_ADDRESS + '/truffle/feedbackDelete', {
+    await fetch(Config.IP_ADDRESS + '/truffle/feedbackDelete', {
       method: 'DELETE',
           headers: {
               'Accept': 'application/json',

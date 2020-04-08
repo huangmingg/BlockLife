@@ -3,10 +3,10 @@ const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 var _ = require('underscore');
 const IPFSTools = require('./IPFS.js');
 
-var fs = require('fs');
+// var fs = require('fs');
 
-var imageAsBase64 = fs.readFileSync('./images/test.jpg').toString('base64');
-imageAsBase64 = `data:image/jpg;base64,${imageAsBase64}`;
+// var imageAsBase64 = fs.readFileSync('./images/test.jpg').toString('base64');
+// imageAsBase64 = `data:image/jpg;base64,${imageAsBase64}`;
 
 // Contract deployment -- Only used during development 
 
@@ -127,7 +127,7 @@ async function startNetwork () {
             await parseUsers();
             await parseInstitutions();
             await registerStakeholders();
-            await fillData();
+            // await fillData();
             //await IPFS.setup();
             })
     .catch(function(error) {

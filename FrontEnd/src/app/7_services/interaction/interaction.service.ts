@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Interaction } from './interaction.model';
 import { HttpClient } from '@angular/common/http';
-// const request = require('request');
+import { element } from 'protractor';
+import Config from '../../env.js'
 
-const IP_ADDRESS = "http://localhost:3000";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,11 @@ export class InteractionService {
     await this.fetchInteractions(address);
     return [...this.interactions];
   }
+  async filterValidInteractions(array) {
+    return array.filter(element => {
+      return element['isValid'] == true
+    })
+  }
 
   retrieveInteraction(interactionHash : string) {
     return this.interactions.find(interaction => {
@@ -26,7 +31,7 @@ export class InteractionService {
   }
 
   async fetchInteractions(address : string) {
-    await fetch(IP_ADDRESS + '/truffle/profile?address=' + (address), {
+    await fetch(Config.IP_ADDRESS + '/truffle/profile?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -34,17 +39,16 @@ export class InteractionService {
       })
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
-      .then((res) => {
+      .then(async (res) => {
         if (res.success) {
-            console.log(res)
-            this.interactions = res.message
+            this.interactions = await this.filterValidInteractions(res.message)
         }
       })
   }
 
 
   async addInteraction(file: string, recipient: string, institution: string) {
-    await fetch(IP_ADDRESS + '/truffle/hash', {
+    await fetch(Config.IP_ADDRESS + '/truffle/hash', {
       method: 'POST',
           headers: {
               'Accept': 'application/json',
@@ -60,15 +64,15 @@ export class InteractionService {
       .then((response : Response) => response.json())
       .then((res) => {
         console.log(res);
-        // this.interactions = res.message
+        return res
       })
   
 
   }
 
-  async deleteInteraction(hash: string, user: string) {
-    await fetch(IP_ADDRESS + '/truffle/hashDelete', {
-      method: 'DELETE',
+  async invalidateInteraction(hash: string, user: string) {
+    await fetch(Config.IP_ADDRESS + '/truffle/invalidate/hash', {
+      method: 'POST',
           headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'

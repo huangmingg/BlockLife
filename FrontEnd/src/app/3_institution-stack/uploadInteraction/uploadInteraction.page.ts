@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { InteractionService } from '../../7_services/interaction/interaction.service';
 import { ValidationService } from '../../7_services/validation/validation.service';
 import { ConversionService } from '../../7_services/conversion/conversion.service';
+import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 
 @Component({
   selector: 'app-uploadInteraction',
@@ -15,11 +16,12 @@ export class UploadInteractionPage {
   image : string
   recipientAddress: string
   
-  constructor(
+  constructor (
     private route: Router, 
     private interactionService: InteractionService, 
     private validationService: ValidationService,
-    private conversionService: ConversionService 
+    private conversionService: ConversionService,
+    private authenticationService : AuthenticationService
   ) { }
 
   ngOnInit() {
@@ -27,8 +29,7 @@ export class UploadInteractionPage {
   }
 
   async validateAddress(address) {
-    // currently does not check if the user has had an interaction with the institution before.
-    // would this be a contract-based check?
+    address = address.toLowerCase();
     this.recipientAddress = address;
     var boolean = this.validationService.validateAddress(address); 
     return boolean;
@@ -58,8 +59,8 @@ export class UploadInteractionPage {
   }
 
   async uploadInteraction() {
-    var institutionAddress = "0xEa27b334967Fa7864748c39918EA6234Cd420747"
-    await this.interactionService.addInteraction(this.image, this.recipientAddress, institutionAddress);
+    var address = await this.authenticationService.getUserAddress();
+    await this.interactionService.addInteraction(this.image, this.recipientAddress, address);
   }
   
 
