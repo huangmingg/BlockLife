@@ -27,8 +27,9 @@ export class FeedbackService {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        console.log(res)
-        this.feedbacks = res.message
+        if (res.success) {
+          this.feedbacks = res.message
+        }
       })
   }
 

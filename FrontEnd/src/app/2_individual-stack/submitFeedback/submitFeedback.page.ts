@@ -37,13 +37,14 @@ export class SubmitFeedbackPage implements OnInit {
 
   validateAddress() {
     var result = this.validationService.validateAddress(this.institutionAddress) 
-    console.log(result)
+    // console.log(result)
     return result;
   }
 
   validateFeedback() {
+    this.feedbackText = this.feedbackText.trim()
     var result = this.validationService.validateText(this.feedbackText)
-    console.log(result)
+    // console.log(result)
     return result;
   }
 

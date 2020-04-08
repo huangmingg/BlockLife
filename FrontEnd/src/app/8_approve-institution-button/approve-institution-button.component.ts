@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RegisterService } from '../7_services/register/register.service';
+import { AuthenticationService } from '../7_services/authentication/authentication.service';
 
 @Component({
     selector: 'app-approve-institution-button',
@@ -9,28 +10,25 @@ import { RegisterService } from '../7_services/register/register.service';
   })
 
 export class ApproveInstitutionButtonComponent implements OnInit {
-
     newInstitutionAddress: string
-    // search page should contain search organization component
-    constructor(private route: Router, private registerService: RegisterService) { }
+    constructor (
+        private route: Router, 
+        private registerService: RegisterService,
+        private authenticationService: AuthenticationService
+        ) { }
   
     ngOnInit() {
   
-}
-
-
-
+    }
+    
     async validateAddress(address) {
-    // currently does not check if the user has had an interaction with the institution before.
-    // would this be a contract-based check?
-    this.newInstitutionAddress = address
+        this.newInstitutionAddress = address
     }
 
     async approveInstitution() {
-        var userRegisteringAddress = "0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c"
-        var successful = this.registerService.registerInstitution(this.newInstitutionAddress, userRegisteringAddress)
+        var userAddress = this.authenticationService.getUserAddress();
+        var successful = await this.registerService.registerInstitution(this.newInstitutionAddress, userAddress)
         console.log(successful)
-        console.log("hello")
     }
 
 }
