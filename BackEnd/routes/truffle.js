@@ -66,14 +66,13 @@ router.get('/identity', cors(), async function(req,res,next) {
   })
 })
 
-
-
 // Register address as individual
 router.post('/register/user', cors(), async function(req, res, next) {
   var address = req.body.address;
   address = global.hardMap[address];
+  var name = web3.utils.asciiToHex(req.body.name);
   if (!web3.isAddress(address)) return;
-  await ecosystemInstance.methods.registerIndividual().send({from : address, gas : 1000000})
+  await ecosystemInstance.methods.registerIndividual(name).send({from : address, gas : 1000000})
   .then((result) => {
     res.send({'success' : true, 'message' : `User ${address} has been successfully registered`})
   })
@@ -86,11 +85,12 @@ router.post('/register/user', cors(), async function(req, res, next) {
 router.post('/register/institution', cors(), async function(req, res, next) {
   var institution = req.body.institution;
   var user = req.body.user;
+  var institutionName = web3.utils.asciiToHex(req.body.institutionName);
   institution = global.hardMap[institution];
   user = global.hardMap[user];
 
   if (!web3.isAddress(institution) || !web3.isAddress(user)) return;
-  await ecosystemInstance.methods.registerInstitution(institution).send({from : user, gas : 1000000})
+  await ecosystemInstance.methods.registerInstitution(institution, institutionName).send({from : user, gas : 1000000})
   .then((result) => {
     res.send({'success' : true, 'message' : `Institution ${address} has been successfully registered`})
   })
@@ -192,7 +192,6 @@ router.post('/feedback', cors(), async function(req, res, next) {
   await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
     console.log(result)
-    // confirm what results is
     res.send({'success' : true, 'message' : `${feedback} has been successfully uploaded for institution ${institution}`})
   })
   .catch((err) => {

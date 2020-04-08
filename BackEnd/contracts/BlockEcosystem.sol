@@ -31,9 +31,12 @@ contract BlockEcosystem {
         contractOwner = msg.sender;
         userIdentity[msg.sender] = Identity.owner;
         authorizedList[msg.sender] = true;
+        registeredName[msg.sender] = "Holala";
     }
 
     mapping(address => Identity) userIdentity;
+    mapping(address => bytes) registeredName;
+
     mapping(address => bool) authorizedList;
     mapping(address => Interaction[]) individualProfile;
     // maps to address to interaction hash to index
@@ -100,12 +103,14 @@ contract BlockEcosystem {
         authorizedList[addressCA] = true;
     }
 
-    function registerIndividual() public isUnregisteredUser() {
+    function registerIndividual(bytes memory individualName) public isUnregisteredUser() {
         userIdentity[msg.sender] = Identity.individual;
+        registeredName[msg.sender] = individualName;
     }
 
-    function registerInstitution(address newInstitution) public isAuthorized() {
+    function registerInstitution(address newInstitution, bytes memory institutionName) public isAuthorized() {
         userIdentity[newInstitution] = Identity.institution;
+        registeredName[newInstitution] = institutionName;
     }
 
     function addInteraction(bytes memory interactionHash, uint timestamp, address recipient) public isRegisteredInstitution(msg.sender) {
@@ -167,6 +172,10 @@ contract BlockEcosystem {
 
     function checkUserIdentity(address userAddress) public view returns (Identity) {
         return userIdentity[userAddress];
+    }
+
+    function getName(address targettedAddress) public view returns (bytes) {
+        return registeredName[targettedAddress];
     }   
 
 }
