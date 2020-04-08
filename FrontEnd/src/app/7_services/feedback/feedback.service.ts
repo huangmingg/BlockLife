@@ -17,6 +17,7 @@ export class FeedbackService {
   }
 
   async fetchFeedback(address : string) {
+    address = address.toLowerCase()
     await fetch(Config.IP_ADDRESS + '/truffle/feedback?address=' + (address), {
       method: 'GET',
       headers: {
@@ -33,6 +34,8 @@ export class FeedbackService {
 
 
   async addFeedback(feedback: string, user: string, institution: string) {
+    user = user.toLowerCase()
+    institution = institution.toLowerCase()
     await fetch(Config.IP_ADDRESS + '/truffle/feedback', {
       method: 'POST',
           headers: {

@@ -162,10 +162,17 @@ router.post('/invalidate/hash', cors(), async function(req, res, next) {
 router.post('/feedback', cors(), async function(req, res, next) {
   var feedback = web3.utils.asciiToHex(req.body.feedback);
   var institution = req.body.institution;
-  institution = global.hardMap[institution];
   var user = req.body.user;
-  user = global.hardMap[user];
   var dateTime = Date.now()
+  console.log(`Institution is ${institution}`)
+  console.log(`User is ${user}`)
+
+  // hard map to ganache accounts
+  user = global.hardMap[user];
+  institution = global.hardMap[institution];
+  console.log(`Institution is ${institution}`)
+  console.log(`User is ${user}`)
+
   await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
     console.log(result)
