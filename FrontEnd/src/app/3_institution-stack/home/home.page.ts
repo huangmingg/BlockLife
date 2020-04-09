@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Feedback } from '../../7_services/feedback/feedback.model';
 import { FeedbackService } from '../../7_services/feedback/feedback.service';
-
+import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -10,11 +10,14 @@ import { FeedbackService } from '../../7_services/feedback/feedback.service';
 
 export class HomePage {
   feedbacks : Feedback[] = []
-  constructor(private feedbackService : FeedbackService) {}
+  constructor(
+    private feedbackService : FeedbackService,
+    private authenticationService : AuthenticationService
+    ) {}
 
   ngOnInit() {
     // should be dynamic retrieve when metamask is up
-    var address = "0xEa27b334967Fa7864748c39918EA6234Cd420747";
+    var address = this.authenticationService.getUserAddress();
     this.retrieveAllFeedback(address);
   }
 

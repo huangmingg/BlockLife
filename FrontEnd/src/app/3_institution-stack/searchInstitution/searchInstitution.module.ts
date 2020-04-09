@@ -6,8 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { SearchInstitutionPage } from './searchInstitution.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 import { SearchInstitutionButtonComponentModule } from '../../5_search-institution-button/search-institution-button.module'
-import { SearchUserButtonComponentModule } from '../../6_search-user-button/search-user-button.module'
-
 
 @NgModule({
   imports: [
@@ -16,7 +14,6 @@ import { SearchUserButtonComponentModule } from '../../6_search-user-button/sear
     FormsModule,
     ExploreContainerComponentModule,
     SearchInstitutionButtonComponentModule,
-    SearchUserButtonComponentModule,
     RouterModule.forChild([{ path: '', component: SearchInstitutionPage }])
   ],
   declarations: [SearchInstitutionPage]

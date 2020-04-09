@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Provider } from '@angular/core';
 import { Router } from '@angular/router';
 import { IdentificationService } from '../7_services/identification/identification.service';
 import { AuthenticationService } from '../7_services/authentication/authentication.service';
@@ -33,13 +33,12 @@ export class LoginPage implements OnInit {
     var message = challenge[1]['value']
     var result = await this.sendChallenge(message, signature);
     if (!result) {alert("Authentication failed, please try again!");return;} 
-    var identity = await this.identificationService.getIdentity(address);
+    var identity = await this.identificationService.fetchIdentity(address);
     this.handleIdentity(identity);
   }
 
   async metaMaskInjection() {
-    // console.log(this.web3.currentProvider);
-    var provider = this.web3.currentProvider;
+    var provider : Object = this.web3.currentProvider;
     if ('enable' in provider) {
       try {
         await this.web3.currentProvider.enable();
