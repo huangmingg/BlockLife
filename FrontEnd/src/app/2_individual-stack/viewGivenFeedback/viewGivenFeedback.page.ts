@@ -24,8 +24,9 @@ export class ViewGivenFeedbackPage implements OnInit {
     private authenticationService: AuthenticationService
     ) { }
 
-  async ngOnInit() {
-    console.log('hello');
+    ngOnInit() {}
+
+  async load(){
     this.address = await this.authenticationService.getUserAddress();
     console.log(this.address);
     await this.retrieveAllGivenFeedback(this.address);
@@ -55,7 +56,7 @@ export class ViewGivenFeedbackPage implements OnInit {
         }, {
           text: 'Okay',
           handler: async () => {
-            await this.feedbackService.deleteFeedback(item.hash, this.address);
+            await this.feedbackService.deleteFeedback(item.id, this.address, item.issuee);
           }
         }
       ]

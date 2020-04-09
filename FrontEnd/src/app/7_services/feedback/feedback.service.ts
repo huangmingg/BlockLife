@@ -57,16 +57,16 @@ export class FeedbackService {
   }
   
   async deleteFeedback(feedbackID: string, user: string, institution: string) {
-    await fetch(Config.IP_ADDRESS + '/truffle/feedbackDelete', {
-      method: 'DELETE',
+    await fetch(Config.IP_ADDRESS + '/truffle/feedback/invalidate', {
+      method: 'POST',
           headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              feedbackID: feedbackID,
-              institution: institution,
-              user : user
+            feedbackID: feedbackID,
+              user: user,
+              institution: institution
             }) 
         })
       .catch((error) => {console.log(error)})
@@ -75,6 +75,8 @@ export class FeedbackService {
         console.log(res);
         // this.interactions = res.message
       })
+  
+
   }
 
 
