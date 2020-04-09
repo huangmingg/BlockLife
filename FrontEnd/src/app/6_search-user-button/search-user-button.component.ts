@@ -27,7 +27,7 @@ export class SearchUserButtonComponent implements OnInit {
 
   validateInput(address) {
     this.address = address
-    var bool = this.validationService.validateAddress(address);
+    this.isValid = this.validationService.validateAddress(address);
   }
 
   async handleClick() {
