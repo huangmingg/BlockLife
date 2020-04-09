@@ -7,7 +7,7 @@ import Config from '../../env.js'
 export class AuthenticationService {
   generatedChallenge : Object[] = [];
   isAuthenticated : boolean = false;
-  private userAddress : string
+  private userAddress : string;
 
   constructor() { }
 

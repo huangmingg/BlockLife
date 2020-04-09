@@ -14,6 +14,7 @@ contract BlockEcosystem {
         bytes interactionHash;
         uint dateTime;
         address issuer;
+        address issuee;
         bool isValid;
     }
 
@@ -21,7 +22,8 @@ contract BlockEcosystem {
         uint id;
         bytes text;
         uint dateTime;
-        address owner;
+        address issuer;
+        address issuee;
         bool isValid;
     }
 
@@ -76,10 +78,10 @@ contract BlockEcosystem {
         _;
     }
 
-    modifier isFeedbackOwner(uint feedbackID, address institution) {
+    modifier isFeedbackIssuer(uint feedbackID, address institution) {
         uint index = _indexOfFeedbackList[institution][feedbackID];
-        address owner = organizationFeedback[institution][index].owner;
-        require(msg.sender == owner, "Only the feedback owner has access to this function!");
+        address owner = organizationFeedback[institution][index].issuer;
+        require(msg.sender == owner, "Only the feedback issuer has access to this function!");
         _;
     }
 
@@ -114,7 +116,7 @@ contract BlockEcosystem {
     }
 
     function addInteraction(bytes memory interactionHash, uint timestamp, address recipient) public isRegisteredInstitution(msg.sender) {
-        Interaction memory newInteraction = Interaction(interactionHash, timestamp, msg.sender, true);
+        Interaction memory newInteraction = Interaction(interactionHash, timestamp, msg.sender, recipient, true);
         individualProfile[recipient].push(newInteraction);
         uint256 individualIndex = individualProfile[recipient].length;
         _indexOfInteractionList[recipient][interactionHash] = individualIndex - 1;
@@ -134,7 +136,7 @@ contract BlockEcosystem {
     function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredUser() {
         uint newId = numberFeedback;
         numberFeedback = numberFeedback + 1; 
-        Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, true);
+        Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, institution, true);
         organizationFeedback[institution].push(newFeedback);
         uint256 institutionIndex = organizationFeedback[institution].length;
         _indexOfFeedbackList[institution][newId] = institutionIndex - 1;
@@ -145,7 +147,7 @@ contract BlockEcosystem {
         emit AddedFeedBack(institution);
     }
 
-    function invalidateFeedback(uint feedbackID, address institution) public isFeedbackOwner(feedbackID, institution){
+    function invalidateFeedback(uint feedbackID, address institution) public isFeedbackIssuer(feedbackID, institution){
         uint feedbackIndex = _indexOfFeedbackList[institution][feedbackID];
         organizationFeedback[institution][feedbackIndex].isValid = false;
         emit InvalidateFeedback(feedbackID, institution);
@@ -174,7 +176,7 @@ contract BlockEcosystem {
         return userIdentity[userAddress];
     }
 
-    function getName(address targettedAddress) public view returns (bytes) {
+    function getName(address targettedAddress) public view returns (bytes memory) {
         return registeredName[targettedAddress];
     }   
 
