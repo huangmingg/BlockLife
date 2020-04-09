@@ -46,9 +46,12 @@ async function handleFeedback(feedbackArray) {
     var id = element['id']
     var text = web3.utils.hexToAscii(element['text'])
     var dateTime = element['dateTime']
-    var owner = element['owner']
+    var issuer = element['issuer']
+    var issuee = element['issuee']
     var isValid = element['isValid']
-    output.push({id,text,dateTime,owner,isValid})
+    console.log(issuee);
+    console.log('issuee');
+    output.push({id,text,dateTime,issuer, issuee, isValid})
   });
   return output;
 }
@@ -189,6 +192,7 @@ router.post('/feedback', cors(), async function(req, res, next) {
   institution = global.hardMap[institution];
   console.log(`Institution is ${institution}`)
   console.log(`User is ${user}`)
+  console.log('helloworld')
   await ecosystemInstance.methods.addFeedback(feedback, dateTime, institution).send({from : user, gas : 1000000})
   .then((result) => {
     console.log(result)

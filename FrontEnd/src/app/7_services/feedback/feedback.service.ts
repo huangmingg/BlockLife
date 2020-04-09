@@ -57,8 +57,6 @@ export class FeedbackService {
   }
   
   async deleteFeedback(feedbackID: string, user: string, institution: string) {
-    console.log(institution);
-    console.log('test')
     await fetch(Config.IP_ADDRESS + '/truffle/feedbackDelete', {
       method: 'DELETE',
           headers: {
@@ -76,6 +74,29 @@ export class FeedbackService {
       .then((res) => {
         console.log(res);
         // this.interactions = res.message
+      })
+  }
+
+
+  async retrieveAllGivenFeedback(address : string) {
+    await this.fetchGivenFeedback(address);
+    return [...this.feedbacks];
+  }
+
+  async fetchGivenFeedback(address : string) {
+    address = address.toLowerCase()
+    await fetch(Config.IP_ADDRESS + '/truffle/feedback/individual?address=' + (address), {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'}
+      })
+      .catch((error) => {console.log(error)})
+      .then((response : Response) => response.json())
+      .then((res) => {
+        if (res.success) {
+          this.feedbacks = res.message
+        }
       })
   }
 

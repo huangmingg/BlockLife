@@ -28,11 +28,11 @@ let hardMap = {}
 
 async function mapAddresses(accounts) {
     hardMap = {
-        '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[0],
+        '0x792fc0d05ad353a86f8f22b524e57f090b27ea14' : accounts[0],
         '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[1],
-        '0x0000000000000000000000000000000000000003' : accounts[2],
+        '0x2192e76c85648edcdef826c07c9464788747c326' : accounts[2],
         '0x0000000000000000000000000000000000000004' : accounts[3],
-        '0x0000000000000000000000000000000000000005' : accounts[4],
+        '0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c' : accounts[4],
         '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[5],
         '0x0000000000000000000000000000000000000007' : accounts[6],
         '0x0000000000000000000000000000000000000008' : accounts[7],
@@ -76,17 +76,28 @@ async function parseInstitutions () {
     }
 }
 
+function toBytes(stringInput) {
+    var utf8 = unescape(encodeURIComponent(stringInput));
+
+    var arr = [];
+    for (var i = 0; i < utf8.length; i++) {
+        arr.push(utf8.charCodeAt(i));
+    }
+    return arr
+}
+
+
 async function registerStakeholders () {
     console.log("Registering various stakeholders");
     // Register all users
     for (var user of users) {
         console.log(`Registering ${user['userName']} at ${user['ethAddress']}`);
-        await ecosystemInstance.methods.registerIndividual().send({from : user['ethAddress'], gas : 1000000});
+        await ecosystemInstance.methods.registerIndividual(toBytes(user['userName'])).send({from : user['ethAddress'], gas : 1000000});
     }
     // Register all institutions
     for (var institution of institutions) {
         console.log(`Registering ${institution['institutionName']} at ${institution['ethAddress']}`);
-        await ecosystemInstance.methods.registerInstitution(institution['ethAddress']).send({from : contractOwner, gas : 1000000});
+        await ecosystemInstance.methods.registerInstitution(institution['ethAddress'], toBytes(institution['institutionName'])).send({from : contractOwner, gas : 1000000});
     }
 }
 

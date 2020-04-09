@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      View Given Feedback
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list-header>
+    <ion-title>ID</ion-title>
+    <ion-title>Feedback Content</ion-title>
+    <ion-title>Feedback Date and Time</ion-title>
+  </ion-list-header>
+
+  <ion-list *ngFor="let feedback of feedbacks">
+    <ion-item class='row'>
+      <ion-text slot='start' class='col'> {{ feedback.id }}</ion-text>
+      <ion-text class='col'> {{ feedback.text }}</ion-text>
+      <ion-text slot='end' class='col'> {{ feedback.dateTime }}</ion-text>
+      <ion-icon name="close" style="width: 5%;color: crimson;" slot='end' (click)="handleInvalidate(interaction)"></ion-icon>
+    </ion-item>
+</ion-list>
+</ion-content>
