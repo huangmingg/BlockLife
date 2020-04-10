@@ -20,7 +20,9 @@ export class ProfilePage {
     private authenticationService : AuthenticationService
     ) {}
 
-  async ngOnInit() {
+  ngOnInit() {}
+
+  async refresh() {
     this.address = await this.authenticationService.getUserAddress();
     await this.retrieveAllInteractions(this.address);
   }
