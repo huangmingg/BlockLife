@@ -34,7 +34,8 @@ async function handleHashes(hashArray) {
     var hashAscii = web3.utils.toAscii(hash);
     var image = imageArray[index]
     var issuer = element['issuer']
-    output.push({id : index, hash : hashAscii, image, dateTime, isValid, issuer})  
+    var issuee = element['issuee']
+    output.push({id : index, hash : hashAscii, image, dateTime, isValid, issuer, issuee})  
   })
   return output;
 }

@@ -78,12 +78,11 @@ async function parseInstitutions () {
 
 function toBytes(stringInput) {
     var utf8 = unescape(encodeURIComponent(stringInput));
-
-    var arr = [];
+    var byteArray = [];
     for (var i = 0; i < utf8.length; i++) {
-        arr.push(utf8.charCodeAt(i));
+        byteArray.push(utf8.charCodeAt(i));
     }
-    return arr
+    return byteArray
 }
 
 

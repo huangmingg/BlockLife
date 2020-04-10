@@ -58,6 +58,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'view_given_interactions',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../viewGivenInteractions/viewGivenInteractions.module').then(m => m.ViewGivenInteractionsPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/institution/home',
         pathMatch: 'full'
