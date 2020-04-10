@@ -11,6 +11,7 @@ import { AuthenticationService } from '../../7_services/authentication/authentic
 })
 
 export class ProfilePage {
+  name : string
   address : string
   interactions: Interaction[] = []
 
@@ -20,11 +21,14 @@ export class ProfilePage {
     private authenticationService : AuthenticationService
     ) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.name = await this.authenticationService.retrieveName(this.address);
+  }
 
   async refresh() {
     this.address = await this.authenticationService.getUserAddress();
     await this.retrieveAllInteractions(this.address);
+    this.name = await this.authenticationService.retrieveName(this.address);
   }
 
   async retrieveAllInteractions(address : string) {

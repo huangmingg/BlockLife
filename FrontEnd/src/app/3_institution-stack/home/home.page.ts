@@ -23,8 +23,6 @@ export class HomePage {
   async ngOnInit() {
     // should be dynamic retrieve when metamask is up
     this.address = this.authenticationService.getUserAddress();
-    this.address = "0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c";
-    this.authenticationService.retrieveName(this.address);
     this.name = await this.authenticationService.retrieveName(this.address);
     this.retrieveAllFeedback(this.address);
   }
