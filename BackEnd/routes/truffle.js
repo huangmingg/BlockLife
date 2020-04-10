@@ -70,6 +70,19 @@ router.get('/identity', cors(), async function(req,res,next) {
   })
 })
 
+// Retrieves the name of user
+router.get('/name', cors(), async function(req,res,next) {
+  var address = req.query.address.toString().toLowerCase();
+  var mappedAddress = global.hardMap[address];
+  await ecosystemInstance.methods.getName(mappedAddress).call({from : mappedAddress,  gas: 1000000})
+  .then((result) => {
+    res.send({'success' : true, 'message' : web3.utils.hexToAscii(result)})
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+})
+
 // Register address as individual
 router.post('/register/user', cors(), async function(req, res, next) {
   var address = req.body.address;
