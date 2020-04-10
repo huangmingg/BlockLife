@@ -13,7 +13,7 @@ import { InteractionService } from '../../7_services/interaction/interaction.ser
 
 
 export class ViewGivenInteractionsPage {
-  address : string = "0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c"
+  address : string
   interactions: Interaction[] = []
 
   constructor(
@@ -31,7 +31,6 @@ export class ViewGivenInteractionsPage {
 
   async retrieveAllGivenInteractions(address : string) {
     this.interactions = await this.interactionService.retrieveAllGivenInteractions(address);
-    console.log(this.interactions);
   }
   
   handleImage(interaction) {
