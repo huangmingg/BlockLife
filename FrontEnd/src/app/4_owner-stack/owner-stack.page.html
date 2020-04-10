@@ -7,5 +7,11 @@
 <ion-content [fullscreen]="true">
 
   <app-approve-institution-button></app-approve-institution-button>
-
+  <ion-item>
+    <ion-label position="stacked">New CA Address (Note that CA has to first be an Institution)</ion-label>
+    <ion-input clearInput (input)="validateAddress($event.target.value)" placeholder="Enter Address of New CA"></ion-input>
+    <ion-buttons slot="end">
+      <ion-button (click)="approveCA()">Go <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-item>
 </ion-content>

@@ -11,6 +11,7 @@ import { AuthenticationService } from '../7_services/authentication/authenticati
 
 export class ApproveInstitutionButtonComponent implements OnInit {
     newInstitutionAddress: string
+    newInstitutionName: string
     constructor (
         private route: Router, 
         private registerService: RegisterService,
@@ -25,9 +26,13 @@ export class ApproveInstitutionButtonComponent implements OnInit {
         this.newInstitutionAddress = address
     }
 
+    async validateName(name) {
+        this.newInstitutionName = name
+    }
+
     async approveInstitution() {
         var userAddress = this.authenticationService.getUserAddress();
-        var successful = await this.registerService.registerInstitution(this.newInstitutionAddress, userAddress)
+        var successful = await this.registerService.registerInstitution(this.newInstitutionAddress, userAddress, this.newInstitutionName)
         console.log(successful)
     }
 
