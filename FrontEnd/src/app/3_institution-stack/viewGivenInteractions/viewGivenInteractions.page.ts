@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 import { Interaction } from '../../7_services/interaction/interaction.model';
 import { InteractionService } from '../../7_services/interaction/interaction.service';
-import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: 'profile.page.html',
-  styleUrls: ['profile.page.scss']
+  selector: 'app-viewGivenInteractions',
+  templateUrl: 'viewGivenInteractions.page.html',
+  styleUrls: ['viewGivenInteractions.page.scss']
 })
 
-export class ProfilePage {
-  name : string
+
+export class ViewGivenInteractionsPage {
   address : string
   interactions: Interaction[] = []
 
@@ -21,18 +22,15 @@ export class ProfilePage {
     private authenticationService : AuthenticationService
     ) {}
 
-  async ngOnInit() {
-    this.name = await this.authenticationService.retrieveName(this.address);
-  }
+  ngOnInit() {}
 
-  async refresh() {
+  async refresh(){
     this.address = await this.authenticationService.getUserAddress();
-    await this.retrieveAllInteractions(this.address);
-    this.name = await this.authenticationService.retrieveName(this.address);
+    await this.retrieveAllGivenInteractions(this.address);
   }
 
-  async retrieveAllInteractions(address : string) {
-    this.interactions = await this.interactionService.retrieveAllInteractions(address);
+  async retrieveAllGivenInteractions(address : string) {
+    this.interactions = await this.interactionService.retrieveAllGivenInteractions(address);
   }
   
   handleImage(interaction) {
@@ -46,7 +44,7 @@ export class ProfilePage {
 
   async presentAlertConfirm(item, address) {
     const alert = await this.alertController.create({
-      header: 'Are you sure you wish to invalidate this certificate?',
+      header: 'Are you sure you wish to invalidate this interaction?',
       message: 'This process is irreversible!',
       buttons: [
         {

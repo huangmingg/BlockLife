@@ -30,8 +30,29 @@ export class InteractionService {
     })
   }
 
+  async retrieveAllGivenInteractions(address : string) {
+    await this.fetchGivenInteractions(address);
+    return [...this.interactions];
+  }
+
   async fetchInteractions(address : string) {
     await fetch(Config.IP_ADDRESS + '/truffle/profile?address=' + (address), {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'}
+      })
+      .catch((error) => {console.log(error)})
+      .then((response : Response) => response.json())
+      .then(async (res) => {
+        if (res.success) {
+            this.interactions = await this.filterValidInteractions(res.message)
+        }
+      })
+  }
+
+  async fetchGivenInteractions(address : string) {
+    await fetch(Config.IP_ADDRESS + '/truffle/hash?address=' + (address), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

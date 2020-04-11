@@ -1,29 +1,25 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      BlockLife
+      Previously Uploaded Interactions
     </ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content [fullscreen]="true">
-  <ion-toolbar>
-    <br>
-    <ion-title>Welcome back, {{name}} </ion-title>
-    <br>
-    <br>
-    <ion-title>My interaction hashes</ion-title>
-  </ion-toolbar>
+
   <ion-button (click)="refresh()" style="width: 15%">Refresh</ion-button>
+
   <ion-list-header lines="inset" class='row' style="padding-bottom: 0.3%;">
     <ion-title class='col' style="text-align: start;">ID</ion-title>
-    <ion-title class='col' style="text-align: start;">Issuer Address</ion-title>
+    <ion-title class='col' style="text-align: center;">Issuee</ion-title>
     <ion-title class='col' style="text-align: center;">Hash</ion-title>
     <ion-title class='col' style="text-align: end;padding-right: 10%;">Preview</ion-title>
   </ion-list-header>
   <ion-list *ngFor="let interaction of interactions">
       <ion-item class='row'>
         <ion-text slot='start' class='col'> {{ interaction.id }}</ion-text>
-        <ion-title class='col' style="text-align: center;">{{ interaction.issuer }}</ion-title> 
+        <ion-title class='col' style="text-align: center;">{{ interaction.issuee }}</ion-title> 
         <ion-title class='col' style="text-align: center;">{{ interaction.hash }}</ion-title> 
         <ion-img (click)="handleImage(interaction)" slot='end' style="width: 100px; height: 100px; padding-bottom: 0.9%;"  [src]="interaction.image"></ion-img>
         <ion-icon name="close" style="width: 5%;color: crimson;" slot='end' (click)="handleInvalidate(interaction)"></ion-icon>
@@ -31,4 +27,3 @@
   </ion-list>
 
 </ion-content>
-
