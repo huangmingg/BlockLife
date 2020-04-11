@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./3_institution-stack/institution/institution.module').then( m => m.InstitutionPageModule)
+    loadChildren: () => import('./3_institution-stack/3.1_institution/institution.module').then( m => m.InstitutionPageModule)
   },
   {
     path: '',

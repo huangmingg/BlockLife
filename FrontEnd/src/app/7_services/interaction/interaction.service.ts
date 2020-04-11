@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Interaction } from './interaction.model';
-import { HttpClient } from '@angular/common/http';
-import { element } from 'protractor';
 import Config from '../../env.js'
 
 
@@ -12,12 +10,13 @@ import Config from '../../env.js'
 export class InteractionService {
   private interactions : Interaction[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   async retrieveAllInteractions(address : string) {
     await this.fetchInteractions(address);
     return [...this.interactions];
   }
+
   async filterValidInteractions(array) {
     return array.filter(element => {
       return element['isValid'] == true
@@ -84,14 +83,13 @@ export class InteractionService {
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        console.log(res);
-        return res
+        return res.success;
       })
   
 
   }
 
-  async invalidateInteraction(hash: string, user: string) {
+  async invalidateInteraction(hash: string, recipient: string, from : string) {
     await fetch(Config.IP_ADDRESS + '/truffle/invalidate/hash', {
       method: 'POST',
           headers: {
@@ -100,14 +98,14 @@ export class InteractionService {
           },
           body: JSON.stringify({
               hash: hash,
-              user: user
+              recipient: recipient,
+              from : from
             }) 
         })
       .catch((error) => {console.log(error)})
       .then((response : Response) => response.json())
       .then((res) => {
-        console.log(res);
-        // this.interactions = res.message
+        return res.success;
       })
   
 

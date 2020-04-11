@@ -12,6 +12,7 @@ export class FeedbackService {
   constructor() { }
 
   async retrieveAllFeedback(address : string) {
+    this.feedbacks = [];
     await this.fetchFeedback(address);
     return [...this.feedbacks];
   }

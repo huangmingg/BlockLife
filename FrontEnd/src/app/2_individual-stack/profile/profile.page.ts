@@ -3,6 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Interaction } from '../../7_services/interaction/interaction.model';
 import { InteractionService } from '../../7_services/interaction/interaction.service';
 import { AuthenticationService } from '../../7_services/authentication/authentication.service';
+import { IdentificationService } from '../../7_services/identification/identification.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,17 +19,18 @@ export class ProfilePage {
   constructor(
     private interactionService: InteractionService,
     private alertController: AlertController,
-    private authenticationService : AuthenticationService
+    private authenticationService : AuthenticationService,
+    private identificationService : IdentificationService
     ) {}
 
   async ngOnInit() {
-    this.name = await this.authenticationService.retrieveName(this.address);
+    this.name = await this.identificationService.getUserName();
   }
 
   async refresh() {
     this.address = await this.authenticationService.getUserAddress();
     await this.retrieveAllInteractions(this.address);
-    this.name = await this.authenticationService.retrieveName(this.address);
+    this.name = await this.identificationService.getUserName();
   }
 
   async retrieveAllInteractions(address : string) {
@@ -58,7 +60,7 @@ export class ProfilePage {
         }, {
           text: 'Okay',
           handler: async () => {
-            await this.interactionService.invalidateInteraction(item.hash, this.address);
+            await this.interactionService.invalidateInteraction(item.hash, this.address, this.address);
           }
         }
       ]

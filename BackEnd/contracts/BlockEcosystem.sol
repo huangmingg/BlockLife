@@ -14,7 +14,7 @@ contract BlockEcosystem {
         bytes interactionHash;
         uint dateTime;
         address issuer;
-        address issuee;
+        address recipient;
         bool isValid;
     }
 
@@ -23,7 +23,7 @@ contract BlockEcosystem {
         bytes text;
         uint dateTime;
         address issuer;
-        address issuee;
+        address recipient;
         bool isValid;
     }
 
@@ -65,7 +65,7 @@ contract BlockEcosystem {
         _;
     }
 
-    // check if identity is either contract owner or 
+    // check if identity is either contract owner or CA
     modifier isAuthorized() {
         require(authorizedList[msg.sender] == true, "Only authorized parties have access to this function!");
         _;
@@ -101,8 +101,8 @@ contract BlockEcosystem {
     }
 
     // Can only be performed by contract owner, on registered institutions
-    function registerCA(address addressCA) public isContractOwner() isRegisteredInstitution(addressCA) {
-        authorizedList[addressCA] = true;
+    function approveCA(address institutionAddress) public isContractOwner() isRegisteredInstitution(institutionAddress) {
+        authorizedList[institutionAddress] = true;
     }
 
     function registerIndividual(bytes memory individualName) public isUnregisteredUser() {
@@ -130,6 +130,10 @@ contract BlockEcosystem {
     function invalidateInteraction(bytes memory interactionHash, address recipient) public eitherRecipientOrIssuer(interactionHash, recipient) {
         uint interactionIndex = _indexOfInteractionList[recipient][interactionHash];
         individualProfile[recipient][interactionIndex].isValid = false;
+
+        address issuer = individualProfile[recipient][interactionIndex].issuer;
+        uint uploadedIndex = _indexOfUploadedInteraction[issuer][interactionHash];
+        uploadedInteraction[issuer][uploadedIndex].isValid = false;
         emit InvalidateInteraction(interactionHash);
     }
 
@@ -150,6 +154,10 @@ contract BlockEcosystem {
     function invalidateFeedback(uint feedbackID, address institution) public isFeedbackIssuer(feedbackID, institution){
         uint feedbackIndex = _indexOfFeedbackList[institution][feedbackID];
         organizationFeedback[institution][feedbackIndex].isValid = false;
+
+        address issuer = organizationFeedback[institution][feedbackIndex].issuer;
+        uint addedIndex = _indexOfAddedFeedback[issuer][feedbackID];
+        addedFeedback[issuer][addedIndex].isValid = false;
         emit InvalidateFeedback(feedbackID, institution);
     }
 
