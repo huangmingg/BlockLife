@@ -27,13 +27,13 @@ function reverseObject(object) {
 
 async function mapAddresses(accounts) {
     hardMap = {
-        '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[0],
+        '0x792fc0d05ad353a86f8f22b524e57f090b27ea14' : accounts[0], //== contractOwner, change this address to your own address for testing.  Ensure that it is in lowercase.
         '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[1],
-        '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[2],
+        '0x2192e76c85648edcdef826c07c9464788747c326' : accounts[2],
         '0x0000000000000000000000000000000000000004' : accounts[3],
         '0x0000000000000000000000000000000000000005' : accounts[4],
         '0x0000000000000000000000000000000000000006' : accounts[5],
-        '0x0000000000000000000000000000000000000007' : accounts[6],
+        '0xa0ce3bdd2615fe4959e6fdf30955d73924da2e7c' : accounts[6],
         '0x0000000000000000000000000000000000000008' : accounts[7],
         '0x0000000000000000000000000000000000000009' : accounts[8],
         '0x0000000000000000000000000000000000000010' : accounts[9]
