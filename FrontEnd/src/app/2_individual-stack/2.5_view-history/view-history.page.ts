@@ -22,26 +22,27 @@ export class ViewHistoryPage implements OnInit {
     private authenticationService: AuthenticationService
     ) { }
 
-    ngOnInit() {}
-
-  async load(){
-    this.address = await this.authenticationService.getUserAddress();
-    console.log(this.address);
+  async ngOnInit() {
+    this.address = this.authenticationService.getUserAddress();
     await this.retrieveAllGivenFeedback(this.address);
+  }
+
+  async doRefresh(refresher) {
+    await this.retrieveAllGivenFeedback(this.address).then(() => {
+      refresher.target.complete();
+    })
   }
 
   async retrieveAllGivenFeedback(address : string) {
     this.feedbacks = await this.feedbackService.retrieveAllGivenFeedback(address);
-    console.log(this.feedbacks);
   }
 
   async handleInvalidate(item) {
-    await this.presentAlertConfirm(item, this.address);
+    await this.presentAlertConfirm(item);
   }
 
-
-  async presentAlertConfirm(item, address) {
-    const alert = await this.alertController.create({
+  async presentAlertConfirm(item) {
+    const alert_prompt = await this.alertController.create({
       header: 'Are you sure you wish to invalidate this feedback?',
       message: 'This process is irreversible!',
       buttons: [
@@ -54,12 +55,18 @@ export class ViewHistoryPage implements OnInit {
         }, {
           text: 'Okay',
           handler: async () => {
-            await this.feedbackService.deleteFeedback(item.id, this.address, item.issuee);
+            var res = await this.feedbackService.invalidateFeedback(item.id, this.address, item.recipient);
+            if (res['success']) {
+              alert(`Feedback ${item.id} has been successfully invalidated, refresh to see updated content`);
+            } else {
+              alert(`Failed to invalidate feedback, please try again!`);
+            }
+
           }
         }
       ]
     });
-    await alert.present();
+    await alert_prompt.present();
   }
   
 }

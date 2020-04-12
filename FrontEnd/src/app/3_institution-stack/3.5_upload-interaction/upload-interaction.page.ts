@@ -46,7 +46,6 @@ export class UploadInteractionPage {
     } else {
       await this.uploadInteraction();
     }
-    
   }
 
   async handleImage($event) {

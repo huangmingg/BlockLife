@@ -13,6 +13,7 @@ export class InteractionService {
   constructor() {}
 
   async retrieveAllInteractions(address : string) {
+    this.interactions = [];
     await this.fetchInteractions(address);
     return [...this.interactions];
   }

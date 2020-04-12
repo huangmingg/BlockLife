@@ -227,9 +227,8 @@ router.post('/invalidate/hash', cors(), async function(req, res, next) {
   }
   await ecosystemInstance.methods.invalidateInteraction(hash, recipient).send({from : from,  gas: 1000000})
   .then((result) => {
-    console.log(result)
     if (result.status) {
-      res.send({'success' : true, 'message' : `${hash} has been deleted for user ${recipient}`})
+      res.send({'success' : true, 'message' : `${hash} has been invalidated for user ${recipient}`})
     } else {
       res.send({'success' : false, 'message' : `Something went wrong please try again`})
     }
@@ -310,15 +309,18 @@ router.post('/feedback/invalidate', cors(), async function(req, res, next) {
   var feedbackID = req.body.feedbackID;
   var institution = req.body.institution;
   var user = req.body.user;
-  institution = global.hardMap[institution];
   user = global.hardMap[user];
   if (!web3.utils.isAddress(user) || !web3.utils.isAddress(institution)) {
     res.send({'success' : false, 'message' : `Checksum for address is incorrect`});
     return;
   }
-  await ecosystemInstance.methods.invalidateFeedback(web3.utils.toBN(feedbackID), institution).call({from : user,  gas: 1000000})
+  await ecosystemInstance.methods.invalidateFeedback(web3.utils.toBN(feedbackID), institution).send({from : user,  gas: 1000000})
   .then(async (result) => {
-    console.log(result)
+    if (result.status) {
+      res.send({'success' : true, 'message' : `${feedbackID} has been invalidated for institution ${institution}`})
+    } else {
+      res.send({'success' : false, 'message' : `Something went wrong please try again`})
+    }
   })
   .catch((err) => {
     res.send({'success' : false, 'message' : err})

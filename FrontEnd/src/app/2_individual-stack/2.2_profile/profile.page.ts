@@ -25,12 +25,15 @@ export class ProfilePage {
 
   async ngOnInit() {
     this.name = await this.identificationService.getUserName();
-  }
-
-  async refresh() {
     this.address = await this.authenticationService.getUserAddress();
     await this.retrieveAllInteractions(this.address);
-    this.name = await this.identificationService.getUserName();
+  }
+
+  
+  async doRefresh(refresher) {
+    await this.retrieveAllInteractions(this.address).then(() => {
+      refresher.target.complete();
+    })
   }
 
   async retrieveAllInteractions(address : string) {
@@ -42,12 +45,12 @@ export class ProfilePage {
   }
 
   async handleInvalidate(item) {
-    await this.presentAlertConfirm(item, this.address);
+    await this.presentAlertConfirm(item);
   }
 
 
-  async presentAlertConfirm(item, address) {
-    const alert = await this.alertController.create({
+  async presentAlertConfirm(item) {
+    const alert_prompt = await this.alertController.create({
       header: 'Are you sure you wish to invalidate this certificate?',
       message: 'This process is irreversible!',
       buttons: [
@@ -60,11 +63,17 @@ export class ProfilePage {
         }, {
           text: 'Okay',
           handler: async () => {
-            await this.interactionService.invalidateInteraction(item.hash, this.address, this.address);
+            var res = await this.interactionService.invalidateInteraction(item.hash, item.recipient, this.address);
+            if (res['success']) {
+              alert(`Interaction ${item.hash} has been successfully invalidated, refresh to see updated content`);
+            } else {
+              alert(`Failed to upload interaction, please try again!`);
+            }
           }
         }
       ]
     });
-    await alert.present();
+    await alert_prompt.present();
   }
+
 }
