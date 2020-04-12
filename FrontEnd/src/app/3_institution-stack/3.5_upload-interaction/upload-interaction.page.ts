@@ -58,10 +58,13 @@ export class UploadInteractionPage {
   async uploadInteraction() {
     var address = await this.authenticationService.getUserAddress();
     var res = await this.interactionService.addInteraction(this.image, this.recipientAddress, address)
-    // .then((res) => {
-    //   console.log(res)
-    // })
-    console.log(res)
+    if (res['success']) {
+      (document.getElementById("address-input") as HTMLInputElement).value = "";
+      (document.getElementById("file-input") as HTMLInputElement).value = "";      
+      alert(`Interaction has been successfully uploaded for ${this.recipientAddress}!`)
+    } else {
+      alert(`Failed to upload interaction, please try again!`)
+    }
   }
   
 

@@ -65,7 +65,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../3.7_approveInstitution/approveInstitution.module').then(m => m.ApproveInstitutionPageModule)
+              import('../3.7_register-institution/register-institution.module').then(m => m.RegisterInstitutionPageModule)
           }
         ]
       },

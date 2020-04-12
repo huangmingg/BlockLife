@@ -46,8 +46,7 @@ export class ViewHistoryPage {
 
 
   async presentAlertConfirm(item) {
-    console.log(item)
-    const alert = await this.alertController.create({
+    const alert_prompt = await this.alertController.create({
       header: 'Are you sure you wish to invalidate this interaction?',
       message: 'This process is irreversible!',
       buttons: [
@@ -60,11 +59,16 @@ export class ViewHistoryPage {
         }, {
           text: 'Okay',
           handler: async () => {
-            await this.interactionService.invalidateInteraction(item.hash, item.recipient, this.address);
+            var res = await this.interactionService.invalidateInteraction(item.hash, item.recipient, this.address);
+            if (res['success']) {
+              alert(`Interaction ${item.hash} has been successfully invalidated, refresh to see updated content`);
+            } else {
+              alert(`Failed to upload interaction, please try again!`);
+            }
           }
         }
       ]
     });
-    await alert.present();
+    await alert_prompt.present();
   }
 }

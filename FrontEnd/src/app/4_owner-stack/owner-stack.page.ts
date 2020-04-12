@@ -70,7 +70,6 @@ export class OwnerStackPage implements OnInit {
     var userAddress = this.authenticationService.getUserAddress();
     var result = await this.registerService.registerInstitution(this.newInstitutionAddress, userAddress, this.newInstitutionName)
     if (result) {
-      
       (document.getElementById("institution-address-input") as HTMLInputElement).value = "";
       (document.getElementById("institution-name-input") as HTMLInputElement).value = "";
       alert(`Successfully registered institution ${this.newInstitutionAddress}`);

@@ -3,9 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApproveInstitutionPage } from './approveInstitution.page';
+import { RegisterInstitutionPage } from './register-institution.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
-// import { ApproveInstitutionButtonComponentModule } from '../../7_approve-institution-button/approve-institution-button.module'
 
 @NgModule({
   imports: [
@@ -13,9 +12,8 @@ import { ExploreContainerComponentModule } from '../../0_explore-container/explo
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    // ApproveInstitutionButtonComponentModule,
-    RouterModule.forChild([{ path: '', component: ApproveInstitutionPage }])
+    RouterModule.forChild([{ path: '', component: RegisterInstitutionPage }])
   ],
-  declarations: [ApproveInstitutionPage]
+  declarations: [RegisterInstitutionPage]
 })
-export class ApproveInstitutionPageModule {}
+export class RegisterInstitutionPageModule {}
