@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ViewGivenFeedbackPage } from './viewGivenFeedback.page';
+import { ViewHistoryPage } from './view-history.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 import { SearchInstitutionButtonComponentModule } from '../../5_search-institution-button/search-institution-button.module'
 
@@ -15,8 +15,8 @@ import { SearchInstitutionButtonComponentModule } from '../../5_search-instituti
     FormsModule,
     ExploreContainerComponentModule,
     SearchInstitutionButtonComponentModule,
-    RouterModule.forChild([{ path: '', component: ViewGivenFeedbackPage }])
+    RouterModule.forChild([{ path: '', component: ViewHistoryPage }])
   ],
-  declarations: [ViewGivenFeedbackPage]
+  declarations: [ViewHistoryPage]
 })
-export class ViewGivenFeedbackModule {}
+export class ViewHistoryPageModule {}

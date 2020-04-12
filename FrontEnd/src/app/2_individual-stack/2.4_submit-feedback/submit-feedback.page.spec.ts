@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 
-import { SubmitFeedbackPage } from './submitFeedback.page';
+import { SubmitFeedbackPage } from './submit-feedback.page';
 
 describe('SubmitFeedbackPage', () => {
   let component: SubmitFeedbackPage;

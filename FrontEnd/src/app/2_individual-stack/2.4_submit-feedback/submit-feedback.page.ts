@@ -5,9 +5,9 @@ import { FeedbackService } from '../../7_services/feedback/feedback.service';
 import { ValidationService } from '../../7_services/validation/validation.service';
 import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 @Component({
-  selector: 'app-submitFeedback',
-  templateUrl: 'submitFeedback.page.html',
-  styleUrls: ['submitFeedback.page.scss']
+  selector: 'app-submit-feedback',
+  templateUrl: 'submit-feedback.page.html',
+  styleUrls: ['submit-feedback.page.scss']
 })
 
 

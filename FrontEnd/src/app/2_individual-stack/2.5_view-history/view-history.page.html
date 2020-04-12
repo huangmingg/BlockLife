@@ -21,7 +21,7 @@
     <ion-item class='row'>
       <ion-text slot='start' class='col'> {{ feedback.id }}</ion-text>
       <ion-title class='col'> {{ feedback.text }}</ion-title>
-      <ion-text slot='end' class='col'> {{ feedback.issuee }}</ion-text>
+      <ion-text slot='end' class='col'> {{ feedback.recipient }}</ion-text>
       <ion-icon name="close" style="width: 5%;color: crimson;" slot='end' (click)="handleInvalidate(feedback)"></ion-icon>
     </ion-item>
 </ion-list>

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TabsPage } from './tabs.page';
+import { IndividualPage } from './individual.page';
 
 const routes: Routes = [
   {
     path: 'individual',
-    component: TabsPage,
+    component: IndividualPage,
     children: [
       {
         path: 'profile',
@@ -13,7 +13,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../profile/profile.module').then(m => m.ProfilePageModule)
+              import('../2.2_profile/profile.module').then(m => m.ProfilePageModule)
           }
         ]
       },
@@ -23,27 +23,27 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../search/search.module').then(m => m.SearchPageModule)
+              import('../2.3_search/search.module').then(m => m.SearchPageModule)
           }
         ]
       },
       {
-        path: 'submitFeedback',
+        path: 'submit_feedback',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../submitFeedback/submitFeedback.module').then(m => m.SubmitFeedbackModule)
+              import('../2.4_submit-feedback/submit-feedback.module').then(m => m.SubmitFeedbackPageModule)
           }
         ]
       },
       {
-        path: 'viewGivenFeedback',
+        path: 'view_history',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../viewGivenFeedback/viewGivenFeedback.module').then(m => m.ViewGivenFeedbackModule)
+              import('../2.5_view-history/view-history.module').then(m => m.ViewHistoryPageModule)
           }
         ]
       },
@@ -65,4 +65,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class IndividualPageRoutingModule {}

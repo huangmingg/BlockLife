@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./2_individual-stack/tabs/tabs.module').then( m => m.TabsPageModule)
+    loadChildren: () => import('./2_individual-stack/2.1_individual/individual.module').then( m => m.IndividualPageModule)
   },
   {
     path: '',

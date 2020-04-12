@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SubmitFeedbackPage } from './submitFeedback.page';
+import { SubmitFeedbackPage } from './submit-feedback.page';
 import { ExploreContainerComponentModule } from '../../0_explore-container/explore-container.module';
 import { SearchInstitutionButtonComponentModule } from '../../5_search-institution-button/search-institution-button.module'
 
@@ -19,4 +19,4 @@ import { SearchInstitutionButtonComponentModule } from '../../5_search-instituti
   ],
   declarations: [SubmitFeedbackPage]
 })
-export class SubmitFeedbackModule {}
+export class SubmitFeedbackPageModule {}

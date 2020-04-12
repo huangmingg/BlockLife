@@ -1,24 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
 import { Feedback } from '../../7_services/feedback/feedback.model';
 import { FeedbackService } from '../../7_services/feedback/feedback.service';
 import { AuthenticationService } from '../../7_services/authentication/authentication.service';
 @Component({
-  selector: 'app-viewGivenFeedback',
-  templateUrl: 'viewGivenFeedback.page.html',
-  styleUrls: ['viewGivenFeedback.page.scss']
+  selector: 'app-view-history',
+  templateUrl: 'view-history.page.html',
+  styleUrls: ['view-history.page.scss']
 })
 
 
-export class ViewGivenFeedbackPage implements OnInit {
+export class ViewHistoryPage implements OnInit {
   address : string
   feedbackText : string
   feedbacks: Feedback[] = []
   institutionAddress: string
   
   constructor(
-    private route: Router, 
     private feedbackService: FeedbackService, 
     private alertController: AlertController,
     private authenticationService: AuthenticationService
