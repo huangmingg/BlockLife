@@ -8,18 +8,6 @@ async function send(image) {
     }    
 }
 
-// async function retrieve(hash) {
-//     let IPFSnode = global.IPFS
-//     try {
-//         for await ( const file of IPFSnode.get(hash)) { //returns buffer. need to convert to something usable
-//             return file
-//         }   
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
-
-
 async function retrieve(hash) {
     console.log(`Retrieving hash of ${hash}`)
     return new Promise(function(resolve, reject) {

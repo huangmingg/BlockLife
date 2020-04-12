@@ -8,7 +8,6 @@ export class AuthenticationService {
   generatedChallenge : Object[] = [];
   isAuthenticated : boolean = false;
   private userAddress : string;
-  private userName: string;
 
   constructor() { }
 
@@ -24,11 +23,6 @@ export class AuthenticationService {
   async authenticateUser(message : string, signature : string) {
     await this._authenticateUser(message, signature);
     return this.isAuthenticated;
-  }
-
-  async retrieveName(address : string) {
-    await this._retrieveName(address);
-    return this.userName;
   }
 
   private async _retrieveChallenge(address : string) {
@@ -64,20 +58,6 @@ export class AuthenticationService {
           this.isAuthenticated = true;
         }
     });
-  }
-
-  private async _retrieveName(address : string) {
-    await fetch(Config.IP_ADDRESS + '/truffle/name?address=' + [address], {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'}
-      })
-      .catch((error) => {console.log(error)})
-      .then((response : Response) => response.json())
-      .then((res) => {
-        this.userName = res.message
-      });
   }
 
 }
