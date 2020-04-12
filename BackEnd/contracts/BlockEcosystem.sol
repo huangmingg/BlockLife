@@ -36,6 +36,7 @@ contract BlockEcosystem {
         registeredName[msg.sender] = "Holala";
     }
 
+
     mapping(address => Identity) userIdentity;
     mapping(address => bytes) registeredName;
 

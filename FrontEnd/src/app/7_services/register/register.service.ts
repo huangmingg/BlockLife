@@ -28,7 +28,7 @@ export class RegisterService {
   }
 
   private async _registerUser(address : string) {
-    var name = "Bob"
+    var name = "LifeBlocker"
     await fetch(Config.IP_ADDRESS + '/truffle/register/user', {
       method: 'POST',
           headers: {

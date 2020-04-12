@@ -7,14 +7,7 @@ const IPFSTools = require('./IPFS.js');
 
 // DEFAULT 
 // ACCOUNTS[0] == contractOwner
-// ACCOUNTS[1] == user1 (Bob)
-// ACCOUNTS[2] == user2 (Peter)
-// ACCOUNTS[3] == user3 (James)
-// ACCOUNTS[4] == institution1 (Facebook)
-// ACCOUNTS[5] == institution1 (Amazon)
-// ACCOUNTS[6] == institution1 (Apple)
-// ACCOUNTS[7] == institution1 (Netflix)
-// ACCOUNTS[8] == institution1 (Google)
+
 
 // ***********The following contains a hard map of the 10 dummy accounts *********************
 // Change the address accordingly to assume different roles in the network
