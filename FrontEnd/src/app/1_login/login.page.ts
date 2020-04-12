@@ -90,7 +90,7 @@ export class LoginPage implements OnInit {
   // 1 represents registered individual
   // 2 represents registered institutions
   // 3 represents contract owner
-  // else (0) represents new user
+  // else 0 represents new user
   async handleIdentity(identity : number) {
     if (identity == 2) {
       this.route.navigate(['/institution']);
@@ -98,7 +98,8 @@ export class LoginPage implements OnInit {
       this.route.navigate(['/owner']);
     } else {
       if (identity == 0) {
-        this.registerService.registerUser(this.userAddress);
+        await this.registerService.registerUser(this.userAddress);
+        await this.identificationService.fetchIdentity(this.userAddress);
       }
       this.route.navigate(['/individual']);
     }

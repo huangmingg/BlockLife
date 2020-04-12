@@ -19,11 +19,6 @@ export class IdentificationService {
     return this.userIdentity;
   }
 
-  // For new users who have just registered
-  async changeUserIdentity() {
-    
-  }
-
   async fetchIdentity(address : string) {
     await this._checkIdentity(address);
     return this.userIdentity;

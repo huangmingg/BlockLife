@@ -68,8 +68,6 @@ export class RegisterService {
   }
 
   private async _registerCA(institution : string, user : string) {
-    institution = institution.toLowerCase()
-    user = user.toLowerCase()
     await fetch(Config.IP_ADDRESS + '/truffle/approve', {
       method: 'POST',
           headers: {
