@@ -54,6 +54,8 @@ contract BlockEcosystem {
     mapping(address => Feedback[]) addedFeedback;
     mapping(address => mapping(uint => uint)) private _indexOfAddedFeedback;
 
+    mapping(address => mapping(address => bool)) hadInteraction;
+
 
     event AddedInteraction(address);
     event AddedFeedBack(address);
@@ -92,12 +94,17 @@ contract BlockEcosystem {
     }
 
     modifier isRegisteredUser() {
-        require(userIdentity[msg.sender] == Identity.individual, "Only registered uesrs have access to this function!");
+        require(userIdentity[msg.sender] == Identity.individual, "Only registered users have access to this function!");
         _;
     }
 
     modifier isUnregisteredUser() {
-        require(userIdentity[msg.sender] == Identity.undefined, "Only unregistered uesrs have access to this function!");
+        require(userIdentity[msg.sender] == Identity.undefined, "Only unregistered users have access to this function!");
+        _;
+    }
+
+    modifier hasPreviousInteraction(address institutionAddress) {
+        require(hadInteraction[msg.sender][institutionAddress] == true, "Only users with previous interactions can access this function!");
         _;
     }
 
@@ -125,6 +132,8 @@ contract BlockEcosystem {
         uploadedInteraction[msg.sender].push(newInteraction);
         uint256 institutionIndex = uploadedInteraction[msg.sender].length;
         _indexOfUploadedInteraction[msg.sender][interactionHash] = institutionIndex - 1;
+
+        hadInteraction[recipient][msg.sender] = true;
         emit AddedInteraction(recipient);
     }
 
@@ -138,7 +147,7 @@ contract BlockEcosystem {
         emit InvalidateInteraction(interactionHash);
     }
 
-    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredUser() {
+    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredUser() hasPreviousInteraction(institution) {
         uint newId = numberFeedback;
         numberFeedback = numberFeedback + 1; 
         Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, institution, true);
