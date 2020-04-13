@@ -381,6 +381,19 @@ contract("BlockEcosystem", accounts => {
         }
     });
 
+    it("Non-Individual: Should not be able to view given feedback", async () => {
+        try {
+            await be.getAddedFeedback.call({from: institution_2});
+        } catch (e) {
+            var errorMessage = e['hijackedStack'].split('\n')[0]
+            assert.strictEqual(
+                errorMessage,
+                'Error: Returned error: VM Exception while processing transaction: revert Only registered individuals have access to this function!',
+                'Only individuals are allowed to view the feedback they added, as only individuals are allowed to give feedback');
+        }
+
+    });
+
     //General tests
     it("General: Should be able to check an individual's identity type", () =>
         be.checkUserIdentity.call(individual_2)

@@ -93,8 +93,8 @@ contract BlockEcosystem {
         _;
     }
 
-    modifier isRegisteredUser() {
-        require(userIdentity[msg.sender] == Identity.individual, "Only registered users have access to this function!");
+    modifier isRegisteredIndividual() {
+        require(userIdentity[msg.sender] == Identity.individual, "Only registered individuals have access to this function!");
         _;
     }
 
@@ -152,7 +152,7 @@ contract BlockEcosystem {
         emit InvalidateInteraction(interactionHash);
     }
 
-    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredUser() hasPreviousInteraction(institution) {
+    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredIndividual() hasPreviousInteraction(institution) {
         uint newId = numberFeedback;
         numberFeedback = numberFeedback + 1; 
         Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, institution, true);
@@ -182,8 +182,8 @@ contract BlockEcosystem {
         return uploadedInteraction[msg.sender];
     }
 
-    // For uesrs to retrieve all the feedback they added.
-    function getAddedFeedback() public view isRegisteredUser() returns (Feedback[] memory) {
+    // For users to retrieve all the feedback they added.
+    function getAddedFeedback() public view isRegisteredIndividual() returns (Feedback[] memory) {
         return addedFeedback[msg.sender];
     }
 
