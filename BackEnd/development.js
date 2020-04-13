@@ -10,9 +10,9 @@ const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545'));
 let hardMap = {}  
 async function mapAddresses(accounts) {
     hardMap = {
-        '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[0],
-        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[1],
-        '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[2],
+        '0x1f15d5e91772335a5e247865cf694b744099fafc' : accounts[0],
+        '0x109f0ce02e4813c2ea72b1584bbc3e5fa7ce24f2' : accounts[1],
+        '0xc3b0ccf1f598201649cc4374900fee7090d128cd' : accounts[2],
         '0xccaaf1d70ecc5e4e76316d47a7fc7bd2b00af10f' : accounts[3],
         '0xe7f66fe2f12dad73eede65b53c4a0d48cc1a01a9' : accounts[4],
         '0x0000000000000000000000000000000000000006' : accounts[5],
@@ -22,6 +22,7 @@ async function mapAddresses(accounts) {
         '0x0000000000000000000000000000000000000010' : accounts[9]
     }
 
+    hardMap = lowerCaseObjectAttributes(hardMap)
     reverseMap = reverseObject(hardMap)
     global.hardMap = hardMap
     global.reverseMap = reverseMap
@@ -43,6 +44,15 @@ function reverseObject(object) {
     }
     return newObject;
   }
+
+function lowerCaseObjectAttributes(object) {
+    var newObject = {};
+    for (var key in object) {
+        var newKey = key.toLowerCase();
+        newObject[newKey] = object[key]
+    }
+    return newObject;
+}
 
 async function startNetwork () {
     web3.eth.getAccounts()
