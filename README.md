@@ -4,7 +4,9 @@
 
 Ensure that you have metamask plugin install on your browser.
 
-Go the development.js (BackEnd/development.js) and change the address in accounts[0] to your own address.  You would now the the owner of the contract.
+Go the development.js (BackEnd/development.js) and change the address in accounts[0] to your own address.  You would now the the owner of the contract.  Note that, the values you change it to has to be lowercase.  E.g. if the address in your metamask account has a hexadecimal 'E', you have to change it to 'e' when entering it into the development.js file.
+
+Change the addresses in accounts (e.g. accounts[1], accounts[2] and so on) to accounts that you would like to test.  These accounts should be existing accounts in your metamask browser plug in.
 
 
 Test case 1: Using BlockLife as an institution
