@@ -25,8 +25,8 @@ export class SearchUserButtonComponent implements OnInit {
 
   ngOnInit() {}
 
-  validateInput(address) {
-    this.address = address
+  validateInput(address : string) {
+    this.address = address.toLowerCase();
     this.isValid = this.validationService.validateAddress(address);
   }
 

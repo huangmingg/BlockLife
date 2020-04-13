@@ -26,19 +26,19 @@ export class RegisterInstitutionPage implements OnInit {
     
     }
 
-    onInstitutionNameChange(name) {
+    onInstitutionNameChange(name : string) {
       this.newInstitutionName = name;
     }
   
-    onInstitutionAddressChange(address) {
-      this.newInstitutionAddress = address;
+    onInstitutionAddressChange(address : string) {
+      this.newInstitutionAddress = address.toLowerCase();
     }
 
-    async validateName(name) {
+    async validateName(name : string) {
       return this.validationService.validateText(name);
     }
   
-    async validateAddress(address) {
+    async validateAddress(address : string) {
         return this.validationService.validateAddress(address);
     }
 

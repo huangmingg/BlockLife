@@ -25,12 +25,12 @@ export class SubmitFeedbackPage implements OnInit {
 
   }
 
-  handleFeedback(value) {
+  handleFeedback(value : string) {
     this.feedbackText = value;
   }
   
-  handleAddress(address) {
-    this.institutionAddress = address;
+  handleAddress(address : string) {
+    this.institutionAddress = address.toLowerCase();
   }
   
   async handleClick() {

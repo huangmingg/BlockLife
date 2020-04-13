@@ -30,23 +30,23 @@ export class OwnerStackPage implements OnInit {
     this.name = await this.identificationService.getUserName();
   }
 
-  onInstitutionNameChange(name) {
+  onInstitutionNameChange(name : string) {
     this.newInstitutionName = name;
   }
 
-  onInstitutionAddressChange(address) {
-    this.newInstitutionAddress = address;
+  onInstitutionAddressChange(address : string) {
+    this.newInstitutionAddress = address.toLowerCase();
   }
 
-  onCAAddressChange(address) {
-    this.newCAAddress = address;
+  onCAAddressChange(address : string) {
+    this.newCAAddress = address.toLowerCase();
   }
 
-  async validateName(name) {
+  async validateName(name : string) {
     return this.validationService.validateText(name);
   }
 
-  async validateAddress(address) {
+  async validateAddress(address : string) {
       return this.validationService.validateAddress(address);
   }
 

@@ -17,11 +17,11 @@ export class SearchInstitutionButtonComponent implements OnInit {
 
   ngOnInit() {}
 
-  handleInput(address) {
-    this.institutionAddress = address
+  handleInput(address : string)  {
+    this.institutionAddress = address.toLowerCase();
   }
 
-  validateInput(address) {
+  validateInput(address : string) {
     return this.validationService.validateAddress(address);
   }
 

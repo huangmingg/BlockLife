@@ -26,12 +26,12 @@ export class UploadInteractionPage {
 
   }
 
-  async handleAddressChange(address) {
+  async handleAddressChange(address : string) {
     address = address.toLowerCase();
     this.recipientAddress = address;
   }
 
-  async validateAddress(address) {
+  async validateAddress(address : string) {
     return this.validationService.validateAddress(address); 
   }
 
