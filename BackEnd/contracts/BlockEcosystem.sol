@@ -103,6 +103,11 @@ contract BlockEcosystem {
         _;
     }
 
+    modifier isUnregisteredUser_(address newAddress) {
+        require(userIdentity[newAddress] == Identity.undefined, "Only unregistered users have access to this function!");
+        _;
+    }
+
     modifier hasPreviousInteraction(address institutionAddress) {
         require(hadInteraction[msg.sender][institutionAddress] == true, "Only users with previous interactions can access this function!");
         _;
@@ -118,7 +123,7 @@ contract BlockEcosystem {
         registeredName[msg.sender] = individualName;
     }
 
-    function registerInstitution(address newInstitution, bytes memory institutionName) public isAuthorized() {
+    function registerInstitution(address newInstitution, bytes memory institutionName) public isAuthorized() isUnregisteredUser_(newInstitution) {
         userIdentity[newInstitution] = Identity.institution;
         registeredName[newInstitution] = institutionName;
     }
@@ -186,7 +191,7 @@ contract BlockEcosystem {
         return individualProfile[individual];
     }
 
-    function getFeedback(address institution) public view returns (Feedback[] memory) {
+    function getFeedback(address institution) public view isRegisteredInstitution(institution) returns (Feedback[] memory) {
         return organizationFeedback[institution];
     }
 
