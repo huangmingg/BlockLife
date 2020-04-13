@@ -89,6 +89,28 @@ router.get('/name', cors(), async function(req,res,next) {
   })
 })
 
+// Checks if address is authorized (CA)
+router.get('/authorized', cors(), async function(req,res,next) {
+  var address = req.query.address;
+  address = global.hardMap[address];
+  if (!web3.utils.isAddress(address)) {
+    res.send({'success' : false, 'message' : `Checksum for address is incorrect`});
+    return;
+  }
+  await ecosystemInstance.methods.getAuthorizedStatus(address).call({from : address,  gas: 1000000})
+  .then((result) => {
+    if (result) {
+      res.send({'success' : true, 'message' : `Address ${address} is authorized CA`})
+    } else {
+      res.send({'success' : false, 'message' : `Address ${address} is NOT authorized`})
+    }
+  })
+  .catch((err) => {
+    res.send({'success' : false, 'message' : err})
+  })
+})
+
+
 // Register address as individual
 router.post('/register/user', cors(), async function(req, res, next) {
   var address = req.body.address;

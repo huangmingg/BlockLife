@@ -33,7 +33,7 @@ contract BlockEcosystem {
         contractOwner = msg.sender;
         userIdentity[msg.sender] = Identity.owner;
         authorizedList[msg.sender] = true;
-        registeredName[msg.sender] = "Holala";
+        registeredName[msg.sender] = "IS4302";
     }
 
 
@@ -123,7 +123,8 @@ contract BlockEcosystem {
         registeredName[msg.sender] = individualName;
     }
 
-    function registerInstitution(address newInstitution, bytes memory institutionName) public isAuthorized() isUnregisteredUser_(newInstitution) {
+    function registerInstitution(address newInstitution, bytes memory institutionName) public 
+    isAuthorized() isUnregisteredUser_(newInstitution) {
         userIdentity[newInstitution] = Identity.institution;
         registeredName[newInstitution] = institutionName;
     }
@@ -152,9 +153,10 @@ contract BlockEcosystem {
         emit InvalidateInteraction(interactionHash);
     }
 
-    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  isRegisteredIndividual() hasPreviousInteraction(institution) {
+    function addFeedback(bytes memory feedbackText, uint timestamp, address institution) public  
+    isRegisteredIndividual() hasPreviousInteraction(institution) {
         uint newId = numberFeedback;
-        numberFeedback = numberFeedback + 1; 
+        numberFeedback = numberFeedback.add(1); 
         Feedback memory newFeedback = Feedback(newId, feedbackText, timestamp, msg.sender, institution, true);
         organizationFeedback[institution].push(newFeedback);
         uint256 institutionIndex = organizationFeedback[institution].length;
@@ -201,6 +203,10 @@ contract BlockEcosystem {
 
     function getName(address targettedAddress) public view returns (bytes memory) {
         return registeredName[targettedAddress];
+    }
+
+    function getAuthorizedStatus(address targettedAddress) public view returns (bool) {
+        return authorizedList[targettedAddress];
     }   
 
 }

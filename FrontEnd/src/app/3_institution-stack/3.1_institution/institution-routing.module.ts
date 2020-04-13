@@ -60,7 +60,7 @@ const routes: Routes = [
       },
       {
         
-        path: 'approve_institution',
+        path: 'register_institution',
         children: [
           {
             path: '',

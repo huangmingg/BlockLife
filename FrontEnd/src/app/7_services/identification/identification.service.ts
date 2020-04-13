@@ -19,9 +19,9 @@ export class IdentificationService {
     return this.userIdentity;
   }
 
-  // For new users who have just registered
-  async changeUserIdentity() {
-    
+  async fetchAuthority(address : string) {
+    var res = await this._isAuthorized(address);
+    return res;
   }
 
   async fetchIdentity(address : string) {
@@ -94,5 +94,20 @@ export class IdentificationService {
       });
   }
 
-
+  // This function is only for institutions, whereby it checks if the institution is also a CA
+  private async _isAuthorized(address : string) {
+    return new Promise<Object>(async function(resolve, reject) {
+      await fetch(Config.IP_ADDRESS + '/truffle/authorized?address=' + [address], {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'}
+        })
+        .catch((error) => {reject(error)})
+        .then((response : Response) => response.json())
+        .then((res) => {
+          resolve(res.success)
+        }); 
+    });
+  } 
 }
